@@ -76,7 +76,7 @@ const Contracts = () => {
         <Text style={styles.headingText}>Annual Contracts</Text>
       </View>
       <Card
-        // imageSource={require("../assets/spa.png")}
+        imageSource={require("../assets/spa.jpg")}
         title="Saloon & Spa"
         description="Annual PPM Packages"
         onPress={() => navigation.navigate('salonAnnual')}      />
