@@ -105,7 +105,8 @@ function MainContainer() {
         options={{ headerShown: false }}
         component={ContractStack}
       />
-      <Tab.Screen name="Screen3" component={SupportScreen} />
+      <Tab.Screen name="Screen3" 
+      component={SupportScreen} />
     </Tab.Navigator>
   );
 }

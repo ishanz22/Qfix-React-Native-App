@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#3D4147"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,8 +21,12 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "icon": "./assets/icon.png"
+        "backgroundColor": "#3D4147",
+        "splash": {
+          "image": "./assets/splash.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#3D4147"
+        }
       },
       "package": "com.ishanz.qfix"
     },
