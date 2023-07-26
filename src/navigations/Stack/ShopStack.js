@@ -5,19 +5,18 @@ import HomeScreen from "../../views/HomeScreen";
 import { AntDesign } from "@expo/vector-icons";
 import ACService from "../../views/services/ac/ACService";
 import { Ionicons } from "@expo/vector-icons";
-import PlumbingService from "../../views/services/Plumbing/PlumbingService";
-import ElectricalService from "../../views/services/electrical/ElectricalService";
-import PaintingService from "../../views/services/painting/PaintingService";
-import HandymanService from "../../views/services/handyman/HandymanService";
-import CarpentryService from "../../views/services/carpentry/CarpentryService";
-import CleaningService from "../../views/services/cleaning/CleaningService";
-import PestControlService from "../../views/services/pest/PestControlService";
+import SalonAnnualPackages from "../../views/Packages/SalonAnnualPackages";
+import ContractScreen from "../../views/ContractScreen";
+import VillaAnnualPackages from "../../views/Packages/VillaAnnualPackages";
+import RestaurantAnnualPackages from "../../views/Packages/RestaurantAnnualPackages";
+import ClinicAnnualPackages from "../../views/Packages/ClinicAnnualPackages";
+import ShopScreen from "../../views/ShopScreen";
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const  ShopStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="home"
+      initialRouteName="contract"
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#FBB92B",
         tabBarStyle: { height: 70 },
@@ -60,16 +59,7 @@ const HomeStack = () => {
         header: ({ navigation }) => {
           let headerLeftButton;
 
-          if (
-            route.name === "acservice" ||
-            route.name === "plumbing" ||
-            route.name === "electric" ||
-            route.name === "painting" ||
-            route.name === "handyman" ||
-            route.name === "carpentry" ||
-            route.name === "cleaning" ||
-            route.name === "pest"
-          ) {
+          if (route.name === "villaAnnual" || route.name === "salonAnnual" ||route.name === "restaurantAnnual" || route.name === "clinicAnnual"  ) {
             headerLeftButton = (
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
@@ -99,7 +89,7 @@ const HomeStack = () => {
 
               <View style={styles.cartIconWrapper}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("cartScreen")}
+                 onPress={() =>   navigation.navigate('cartScreen')}
                   style={styles.cartIcon}
                 >
                   <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
@@ -113,76 +103,50 @@ const HomeStack = () => {
       })}
     >
       <Stack.Screen
-        name="home"
-        component={HomeScreen}
+        name="shop"
+        component={ShopScreen}
+        options={{
+          title: " ", // Hide the header for ContractScreen
+        }}
+      />
+
+      {/* Salon*/}
+      {/* <Stack.Screen
+        name="villaAnnual"
+        component={VillaAnnualPackages}
         options={{
           title: " ",
         }}
       />
       <Stack.Screen
-        name="acservice"
-        component={ACService}
-        options={{
-          title: " ",
-        }}
-      />
-      <Stack.Screen
-        name="plumbing"
-        component={PlumbingService}
-        options={{
-          title: " ",
-        }}
-      />
-      <Stack.Screen
-        name="electric"
-        component={ElectricalService}
-        options={{
-          title: " ",
-        }}
-      />
-      <Stack.Screen
-        name="painting"
-        component={PaintingService}
-        options={{
-          title: " ",
-        }}
-      />
-      <Stack.Screen
-        name="handyman"
-        component={HandymanService}
+        name="salonAnnual"
+        component={SalonAnnualPackages}
         options={{
           title: " ",
         }}
       />
 
       <Stack.Screen
-        name="carpentry"
-        component={CarpentryService}
+        name="restaurantAnnual"
+        component={RestaurantAnnualPackages}
         options={{
           title: " ",
         }}
       />
 
-      <Stack.Screen
-        name="cleaning"
-        component={CleaningService}
-        options={{
-          title: " ",
-        }}
-      />
 
       <Stack.Screen
-        name="pest"
-        component={PestControlService}
+        name="clinicAnnual"
+        component={ClinicAnnualPackages}
         options={{
           title: " ",
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };
 
-export default HomeStack;
+export default ShopStack;
 
 const styles = StyleSheet.create({
   headerContainer: {

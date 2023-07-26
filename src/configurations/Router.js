@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { View, Image, TouchableOpacity, StyleSheet,Text } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import MainContainer from "../navigations/MainContainer";
 import HomeScreen from "../views/HomeScreen";
@@ -22,6 +22,8 @@ import HandymanService from "../views/services/handyman/HandymanService";
 import CarpentryService from "../views/services/carpentry/CarpentryService";
 import CleaningService from "../views/services/cleaning/CleaningService";
 import PestControlService from "../views/services/pest/PestControlService";
+import ShopScreen from "../views/ShopScreen";
+import ViewItemScreen from "../views/viewItems/ViewItemScreen";
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -40,8 +42,7 @@ const ACSupplyServiceHeader = ({ navigation }) => (
     <View style={styles.cartIconWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
-   
-        onPress={() =>   navigation.navigate('cartScreen')}
+        onPress={() => navigation.navigate("cartScreen")}
         style={styles.cartIcon}
       >
         <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
@@ -70,8 +71,6 @@ const ACSupplyHeader = ({ navigation }) => (
       />
     </View>
 
-  
-
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
@@ -97,7 +96,7 @@ const AnnualPackageHeader = ({ navigation }) => (
     <View style={styles.cartIconWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
-        onPress={() =>   navigation.navigate('cartScreen')}
+        onPress={() => navigation.navigate("cartScreen")}
         style={styles.cartIcon}
       >
         <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
@@ -118,10 +117,10 @@ const AnnualPackageHeader = ({ navigation }) => (
 const CartHeader = ({ navigation }) => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
-      <Text style={{fontSize:24,color:'white',fontWeight:'bold'}}>Cart</Text>
+      <Text style={{ fontSize: 24, color: "white", fontWeight: "bold" }}>
+        Cart
+      </Text>
     </View>
-
-  
 
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
@@ -138,10 +137,10 @@ const CartHeader = ({ navigation }) => (
 const CheckoutHeader = ({ navigation }) => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
-      <Text style={{fontSize:24,color:'white',fontWeight:'bold'}}>Checkout</Text>
+      <Text style={{ fontSize: 24, color: "white", fontWeight: "bold" }}>
+        Checkout
+      </Text>
     </View>
-
-  
 
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
@@ -166,13 +165,38 @@ const Router = () => {
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
       <Stack.Screen name="acservice" component={ACService} options={hide} />
-      <Stack.Screen name="plumbing" component={PlumbingService} options={hide} />
-      <Stack.Screen name="electric" component={ElectricalService} options={hide} />
-      <Stack.Screen name="painting" component={PaintingService} options={hide} />
-      <Stack.Screen name="handyman" component={HandymanService} options={hide} />
-      <Stack.Screen name="carpentry" component={CarpentryService} options={hide} />
-      <Stack.Screen name="cleaning" component={CleaningService} options={hide} />
+      <Stack.Screen
+        name="plumbing"
+        component={PlumbingService}
+        options={hide}
+      />
+      <Stack.Screen
+        name="electric"
+        component={ElectricalService}
+        options={hide}
+      />
+      <Stack.Screen
+        name="painting"
+        component={PaintingService}
+        options={hide}
+      />
+      <Stack.Screen
+        name="handyman"
+        component={HandymanService}
+        options={hide}
+      />
+      <Stack.Screen
+        name="carpentry"
+        component={CarpentryService}
+        options={hide}
+      />
+      <Stack.Screen
+        name="cleaning"
+        component={CleaningService}
+        options={hide}
+      />
       <Stack.Screen name="pest" component={PestControlService} options={hide} />
+      <Stack.Screen name="shop" component={ShopScreen} options={hide} />
 
       <Stack.Screen
         name="acsupplyservice"
@@ -197,7 +221,7 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="restaurantAnnual"
         component={RestaurantAnnualPackages}
         options={{
@@ -205,30 +229,36 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="clinicAnnual"
         component={ClinicAnnualPackages}
         options={{
           header: AnnualPackageHeader,
         }}
       />
-   <Stack.Screen
+      <Stack.Screen
         name="cartScreen"
         component={CartScreen}
         options={{
           header: CartHeader,
         }}
       />
-{/*  */}
-<Stack.Screen
+      <Stack.Screen
+        name="viewItem"
+        component={ViewItemScreen}
+        options={{
+          header: AnnualPackageHeader,
+        }}
+      />
+
+      {/*  */}
+      <Stack.Screen
         name="checkout"
         component={Checkout}
         options={{
           header: CheckoutHeader,
         }}
       />
-
-
     </Stack.Navigator>
   );
 };
