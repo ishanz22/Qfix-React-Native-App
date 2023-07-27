@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   total:{
     fontSize: 18,
     color:"#3D4147",
-    color:'black',
+  
     fontWeight:'bold'
   },
   price: {

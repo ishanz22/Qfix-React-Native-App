@@ -1,13 +1,12 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, AntDesign, FontAwesome, } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity, View, Image, StyleSheet, Text } from "react-native";
 import HomeScreen from "../views/HomeScreen";
 import ContractScreen from "../views/ContractScreen";
-import SupportScreen from "../views/ShopScreen";
+import SupportScreen from "../views/SupportScreen";
 import HomeStack from "./Stack/HomeStack";
 import ContractStack from "./Stack/ContractStack";
-import ShopStack from "./Stack/ShopStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,18 +19,18 @@ function MainContainer() {
         tabBarItemStyle: { backgroundColor: "rgb(96,99,104)", padding: 10 },
 
         tabBarIcon: ({ color, size, focused }) => {
-          let iconName;
+          let iconName: string;
           let iconColor = focused ? "#FBB92B" : "white";
 
           if (route.name === "Screen1") {
-            iconName = "house";
+            iconName = "home";
           } else if (route.name === "Screen2") {
-            iconName = "shopping-bag";
+            iconName = "settings";
           } else if (route.name === "Screen3") {
-            iconName = "file";
+            iconName = "person";
           }
 
-          return <FontAwesome name={iconName} size={22} color={iconColor} />;
+          return <Ionicons name={iconName} size={size} color={iconColor} />;
         },
 
         tabBarLabel: ({ focused, color }) => {
@@ -40,9 +39,9 @@ function MainContainer() {
           if (route.name === "Screen1") {
             labelText = "Homess"; // Change the label text for 'Screen1'
           } else if (route.name === "Screen2") {
-            labelText = "Shop"; // Change the label text for 'Screen2'
+            labelText = "Contracts"; // Change the label text for 'Screen2'
           } else if (route.name === "Screen3") {
-            labelText = "Contracts"; // Change the label text for 'Screen3'
+            labelText = "Support"; // Change the label text for 'Screen3'
           }
 
           return (
@@ -104,13 +103,9 @@ function MainContainer() {
       <Tab.Screen
         name="Screen2"
         options={{ headerShown: false }}
-        component={ShopStack}
+        component={ContractStack}
       />
-      <Tab.Screen name="Screen3" 
-           options={{ headerShown: false }}
-      component={ContractStack}
-      
-      />
+      <Tab.Screen name="Screen3" component={SupportScreen} />
     </Tab.Navigator>
   );
 }

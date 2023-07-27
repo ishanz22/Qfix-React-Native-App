@@ -2,8 +2,8 @@ import React from "react";
 import { View, StyleSheet, FlatList,Text } from "react-native";
 import PackageCard from "../../components/PackageCard";
 
-export default  ClinicAnnualPackages = () => {
-  const data = [
+const  VillaAnnualPackages = () : any=> {
+  const data: any[] = [
     {
       id: 1,
       title: "Mini Cost              Package",
@@ -56,7 +56,7 @@ export default  ClinicAnnualPackages = () => {
       <FlatList
         data={data}
         numColumns={2}
-        ListHeaderComponent={<Text style={{ paddingHorizontal: 7 , fontSize: 26 ,color:'white',fontWeight:'bold'}}>Clinic Annual Packages</Text>}
+        ListHeaderComponent={<Text style={{ paddingHorizontal: 7 , fontSize: 26 ,color:'white',fontWeight:'bold'}}>Villa Annual Packages</Text>}
         showsVerticalScrollIndicator={false} 
         renderItem={({ item }) => (
           <PackageCard title={item.title} imageSource={item.imageSource} price={item.price} service={item.service}/>
@@ -67,6 +67,9 @@ export default  ClinicAnnualPackages = () => {
   </View>
   )
 }
+
+
+export default VillaAnnualPackages
 const styles = StyleSheet.create({
   container: {
     flex: 1,

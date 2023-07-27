@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#3D4147",
-    fontWeight: "normal",
+  
 
     justifyContent: "center",
     alignItems: "center",

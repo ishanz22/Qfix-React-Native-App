@@ -65,7 +65,7 @@ const ContractStack = () => {
                 style={styles.backButton}
               >
                 <Ionicons
-                  style={styles.backButtonText}
+               
                   name="chevron-back"
                   size={27}
                   color="#FBB92B"

@@ -1,8 +1,7 @@
 import React from "react";
 import { View, StyleSheet, FlatList,Text } from "react-native";
 import PackageCard from "../../components/PackageCard";
-
-export default  SalonAnnualPackages = () => {
+const RestaurantAnnualPackages = () :any=> {
   const data = [
     {
       id: 1,
@@ -32,6 +31,20 @@ export default  SalonAnnualPackages = () => {
       price:"8970 AED",
       service:"3x Year of Service and PPM"
     },
+    {
+        id: 5,
+        title: "Silver          Package",
+        imageSource: require("../../assets/package/silver-package.png"),
+        price:"8970 AED",
+        service:"3x Year of Service and PPM"
+      },
+      {
+        id: 6,
+        title: "Silver          Package",
+        imageSource: require("../../assets/package/silver-package.png"),
+        price:"8970 AED",
+        service:"3x Year of Service and PPM"
+      },
 
     // ... Add more objects with unique titles and image sources
   ];
@@ -42,7 +55,7 @@ export default  SalonAnnualPackages = () => {
       <FlatList
         data={data}
         numColumns={2}
-        ListHeaderComponent={<Text style={{ paddingHorizontal: 7 , fontSize: 26 ,color:'white',fontWeight:'bold'}}>Saloon & Spa Annual Packages</Text>}
+        ListHeaderComponent={<Text style={{ paddingHorizontal: 7 , fontSize: 26 ,color:'white',fontWeight:'bold'}}>Restaurant Annual Packages</Text>}
         showsVerticalScrollIndicator={false} 
         renderItem={({ item }) => (
           <PackageCard title={item.title} imageSource={item.imageSource} price={item.price} service={item.service}/>
@@ -60,3 +73,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D4147",
   },
 });
+
+export default RestaurantAnnualPackages
