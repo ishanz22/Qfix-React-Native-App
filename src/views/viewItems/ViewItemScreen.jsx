@@ -4,7 +4,7 @@ import ViewItem from '../../components/ViewItem'
 
 const ViewItemScreen = () => {
   return (
-    <View style={{ paddingHorizontal: 16, backgroundColor: "#3D4147",height:'100%'}}>
+    <View style={{ backgroundColor: "#3D4147",height:'100%'}}>
       <ViewItem/>
     </View>
   )

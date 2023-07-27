@@ -10,9 +10,22 @@ import {
 } from "react-native";
 import RelatedShopCard from "./RelatedShopCard";
 const IMAGES = ["image1", "image2", "image3", "image4", "image5"];
+import Icon from "react-native-vector-icons/FontAwesome"; // Import the FontAwesome icon from react-native-vector-icons
+
 
 const ViewItem = () => {
   const [selectedImage, setSelectedImage] = useState("image1"); // Set 'image1' as the default selected image.
+  const [count, setCount] = useState(0);
+
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
+  const handleDecrement = () => {
+    if (count > 0) {
+      setCount(count - 1);
+    }
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -157,6 +170,39 @@ const ViewItem = () => {
           />
         </View>
       </ScrollView>
+      {/* Black box at the bottom */}
+      <View style={styles.blackBox}>
+        <View
+          style={{ padding: 9, backgroundColor: "#494E55", borderRadius: 8 }}
+        >
+
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleDecrement} style={styles.button}>
+              <Text style={styles.buttonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.countText}>{count}</Text>
+            <TouchableOpacity onPress={handleIncrement} style={styles.button}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+  
+     <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.hdhdButton} // New style for the button
+            onPress={() => {
+              // Add the functionality you want when the 'hdhd' button is pressed.
+            }}
+          >
+                      <Icon name="shopping-cart" size={20} color="white" style={{ marginRight: 8 }} /> 
+
+            <Text style={styles.hdhdText}>ADD TO CART</Text>
+          </TouchableOpacity>
+        </View>
+      
+   
+      </View>
     </>
   );
 };
@@ -234,7 +280,54 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   scrollViewContent: {
-    paddingBottom: 20,
+    paddingBottom: "22%",
+    paddingHorizontal: 16,
+  },
+  blackBox: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    height: "11%",
+    backgroundColor: "#373B41",
+    flexDirection: "row", // Arrange the buttons horizontally
+    justifyContent: "space-between", // Space the buttons evenly
+    alignItems: "center", // Center the buttons vertically
+    paddingHorizontal: 20, // Add horizontal padding for spacing
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  
+  button: {
+    backgroundColor: "#3D4147",
+    paddingVertical: 0,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  countText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginHorizontal: 10,
+  },
+  hdhdButton: {
+    backgroundColor: "#FBB92B",
+    paddingVertical: 9,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    flexDirection: "row", // Align icon and text horizontally
+    alignItems: "center",
+  },
+  hdhdText: {
+    color: "white",
+    fontSize: 16,
+
   },
 });
 
