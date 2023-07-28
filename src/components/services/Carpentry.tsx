@@ -1,7 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const Card = (props) => {
   const { imageSource, title } = props;
@@ -11,29 +19,92 @@ const Card = (props) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
     props.onPress();
-    navigation.navigate('acsupplyservice');
+    navigation.navigate("acsupplyservice");
   };
 
   return (
     <>
-  
-    <View style={[styles.cardContainer, { height: cardHeight }]}>
-      <TouchableOpacity onPress={handleCardPress} style={{ flex: 1 }}>
-        <Image source={imageSource} style={styles.cardImage} resizeMode="cover" />
-        <View style={styles.overlayBox}>
-          <View style={styles.cardTitleContainer}>
-            <Text style={styles.cardTitle}>{title}</Text>
+      <View style={[styles.cardContainer, { height: cardHeight }]}>
+        <TouchableOpacity onPress={handleCardPress} style={{ flex: 1 }}>
+          <Image
+            source={imageSource}
+            style={styles.cardImage}
+            resizeMode="cover"
+          />
+          <View style={styles.overlayBox}>
+            <View style={styles.cardTitleContainer}>
+              <Text style={styles.cardTitle}>{title}</Text>
+            </View>
           </View>
-        </View>
-        <View style={[styles.textContainer, styles.iconContainer]}>
-          <View style={styles.cardTextContainer}>
-            <Ionicons style={styles.cardText} name="chevron-forward" size={24} color="#FBB92B" />
+          <View style={[styles.textContainer, styles.iconContainer]}>
+            <View style={styles.cardTextContainer}>
+              <Ionicons
+                style={styles.cardText}
+                name="chevron-forward"
+                size={24}
+                color="#FBB92B"
+              />
+            </View>
           </View>
-        </View>
-        <View style={[styles.additionalBox, styles.triangleCorner, { height: cardHeight }]} />
-      </TouchableOpacity>
-    </View>
-    <View style={{height:5}}/>
+          <View
+            style={[
+              styles.additionalBox,
+              styles.triangleCorner,
+              { height: cardHeight },
+            ]}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 5 }} />
+    </>
+  );
+};
+
+const CallOutCard = (props) => {
+  const { imageSource, title } = props;
+  const cardHeight = 90; // Adjust as needed
+  const navigation = useNavigation();
+  const handleCardPress = () => {
+    console.log(`Pressed ${title}`);
+    // Perform the desired action when a card is pressed
+    props.onPress();
+    navigation.navigate("acsupplyservice");
+  };
+
+  return (
+    <>
+      <View style={[styles.cardContainer, { height: cardHeight }]}>
+        <TouchableOpacity onPress={handleCardPress} style={{ flex: 1 }}>
+          <Image
+            source={imageSource}
+            style={styles.cardImage}
+            resizeMode="cover"
+          />
+          <View style={styles.overlayBox}>
+            <View style={styles.cardTitleContainer}>
+              <Text style={styles.cardTitle}>{title}</Text>
+            </View>
+          </View>
+          <View style={[styles.textContainer, styles.iconContainer]}>
+            <View style={styles.cardTextContainer}>
+              <Ionicons
+                style={styles.cardText}
+                name="chevron-forward"
+                size={24}
+                color="#FBB92B"
+              />
+            </View>
+          </View>
+          <View
+            style={[
+              styles.additionalBox,
+              styles.triangleCorner,
+              { height: cardHeight },
+            ]}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={{ height: 5 }} />
     </>
   );
 };
@@ -46,8 +117,17 @@ const Carpentry = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-       <View style={styles.headingContainer}>
-       <Text style={{ paddingHorizontal: 3 , fontSize: 26 ,color:'white',fontWeight:'bold'}}>Carpentry Services</Text>
+      <View style={styles.headingContainer}>
+        <Text
+          style={{
+            paddingHorizontal: 3,
+            fontSize: 26,
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Carpentry Services
+        </Text>
       </View>
       <Card
         imageSource={require("../../assets/acse.jpg")}
@@ -64,6 +144,26 @@ const Carpentry = () => {
         title="Carpentry Repair"
         onPress={() => handleCardPress("A/C Repair")}
       />
+
+      <View style={{ height: "3%" }} />
+      <View style={styles.headingContainer}>
+        <Text
+          style={{
+            paddingHorizontal: 3,
+            fontSize: 26,
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Emergencies
+        </Text>
+      </View>
+
+      <CallOutCard
+        imageSource={require("../../assets/ad.jpg")}
+        title="Call Out"
+        onPress={() => handleCardPress("A/C Repair")}
+      />
     </ScrollView>
   );
 };
@@ -73,8 +173,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
 
     alignItems: "center",
-// Adjust the vertical margin as needed
-
+    // Adjust the vertical margin as needed
   },
   rectangle: {
     width: 100 * 2,
@@ -150,13 +249,12 @@ const styles = StyleSheet.create({
   },
   cardText: {},
   headingContainer: {
- 
     alignSelf: "flex-start",
   },
   headingText: {
     fontSize: 26,
     color: "white",
-  }
+  },
 });
 
 export default Carpentry;

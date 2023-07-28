@@ -16,7 +16,7 @@ function MainContainer() {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: "#FBB92B",
         tabBarStyle: { height: 70 },
-        tabBarItemStyle: { backgroundColor: "rgb(96,99,104)", padding: 10 },
+        tabBarItemStyle: { backgroundColor: "#3D4147", padding: 10 },
 
         tabBarIcon: ({ color, size, focused }) => {
           let iconName: string;
@@ -116,13 +116,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#3D4147",
-    height: 90,
+    paddingBottom:10
   },
   logoContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "5%",
+   
   },
   logo: {
     width: 100,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   cartIconWrapper: {
     position: "absolute",
     right: 15,
-    top: "45%",
+  
   },
   cartIcon: {},
 });

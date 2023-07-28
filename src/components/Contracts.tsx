@@ -62,6 +62,8 @@ const Card = (props) => {
   );
 };
 
+
+
 const Contracts = () => {
   const navigation = useNavigation();
   const handleCardPress = (title) => {

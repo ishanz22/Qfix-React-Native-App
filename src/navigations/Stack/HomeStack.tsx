@@ -113,13 +113,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#3D4147',
-    height: 90,
+    paddingBottom:10
   },
   logoContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: '5%',
+
   },
   logo: {
     width: 100,
@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
   cartIconWrapper: {
     position: 'absolute',
     right: 15,
-    top: '45%',
+  
   },
   cartIcon: {},
   backButton: {
     position: 'absolute',
     left: 12,
-    top: '45%',
+   
   },
   backButtonText: {}, // Add appropriate styles for the back button text
 });

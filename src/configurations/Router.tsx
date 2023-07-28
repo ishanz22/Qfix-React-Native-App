@@ -116,7 +116,7 @@ const AnnualPackageHeader = ({ navigation }):any => (
   </View>
 );
 const CartHeader = ({ navigation }):any => (
-  <View style={styles.headerContainer}>
+  <View style={[styles.headerContainer, styles.additionalStyle]}>
     <View style={styles.logoContainer}>
       <Text style={{fontSize:24,color:'white',fontWeight:'bold'}}>Cart</Text>
     </View>
@@ -241,13 +241,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#3D4147",
-    height: 90,
+    paddingBottom:10
+ 
   },
   logoContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: "5%",
+ 
   },
   logo: {
     width: 100,
@@ -256,13 +257,17 @@ const styles = StyleSheet.create({
   cartIconWrapper: {
     position: "absolute",
     right: 15,
-    top: "45%",
+
   },
   cheveronWrapper: {
     position: "absolute",
     left: 12,
-    top: "45%",
+
   },
   cartIcon: {},
   cheveron: {},
+  additionalStyle:{
+    paddingTop:15,
+    paddingBottom:15
+  }
 });
