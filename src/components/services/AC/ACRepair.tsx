@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Image, Text, StyleSheet, ScrollView } from "react-native";
-import ContactUsBtn from "../ContactUsBtn";
+import ContactUsBtn from "../../ContactUsBtn";
 
-const ACSupply = () => {
+const ACRepair = () => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleDescription = () => {
@@ -24,12 +24,12 @@ const ACSupply = () => {
       >
         <View style={styles.container}>
           <Image
-            source={require("../../assets/Ac-Supply.png")}
+            source={require("../../../assets/Ac-Supply.png")}
             style={styles.image}
             resizeMode="cover"
           />
         </View>
-        <Text style={styles.title}>AC Supply Services</Text>
+        <Text style={styles.title}>AC Repair Services</Text>
         <View style={styles.descriptionContainer}>
           <Text style={styles.description}>
             {expanded
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ACSupply;
+export default ACRepair;

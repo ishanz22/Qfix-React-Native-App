@@ -1,6 +1,6 @@
 import { View, ScrollView, Text } from "react-native";
 import React from "react";
-import ACSupply from "../../../components/services/ACSupply";
+import ACSupply from "../../../components/services/AC/ACSupply";
 
 const ACSupplyService = () => {
   return (

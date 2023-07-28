@@ -22,6 +22,8 @@ import HandymanService from "../views/services/handyman/HandymanService";
 import CarpentryService from "../views/services/carpentry/CarpentryService";
 import CleaningService from "../views/services/cleaning/CleaningService";
 import PestControlService from "../views/services/pest/PestControlService";
+import ACInstall from "../components/services/AC/ACInstall";
+import ACRepair from "../components/services/AC/ACRepair";
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -177,6 +179,22 @@ const Router = () => {
       <Stack.Screen
         name="acsupplyservice"
         component={ACSupplyService}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+
+<Stack.Screen
+        name="acinstall"
+        component={ACInstall}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+
+<Stack.Screen
+        name="acrepair"
+        component={ACRepair}
         options={{
           header: ACSupplyHeader,
         }}
