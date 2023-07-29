@@ -173,14 +173,32 @@ const Router = () => {
       <Stack.Screen name="home" component={HomeScreen} options={hide} />
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
-      <Stack.Screen name="acservice" component={ACService} options={hide} />
-      <Stack.Screen name="plumbing" component={PlumbingService} options={hide} />
-      <Stack.Screen name="electric" component={ElectricalService} options={hide} />
-      <Stack.Screen name="painting" component={PaintingService} options={hide} />
-      <Stack.Screen name="handyman" component={HandymanService} options={hide} />
-      <Stack.Screen name="carpentry" component={CarpentryService} options={hide} />
-      <Stack.Screen name="cleaning" component={CleaningService} options={hide} />
-      <Stack.Screen name="pest" component={PestControlService} options={hide} />
+      <Stack.Screen name="acservice" component={ACService}   options={{
+          header: ACSupplyHeader,
+        }} />
+      <Stack.Screen name="plumbing" component={PlumbingService} options={{
+          header: ACSupplyHeader,
+        }}  />
+
+        {/*  */}
+      <Stack.Screen name="electric" component={ElectricalService} options={{
+          header: ACSupplyHeader,
+        }}  />
+      <Stack.Screen name="painting" component={PaintingService}options={{
+          header: ACSupplyHeader,
+        }} />
+      <Stack.Screen name="handyman" component={HandymanService}options={{
+          header: ACSupplyHeader,
+        }}  />
+      <Stack.Screen name="carpentry" component={CarpentryService} options={{
+          header: ACSupplyHeader,
+        }}  />
+      <Stack.Screen name="cleaning" component={CleaningService} options={{
+          header: ACSupplyHeader,
+        }}  />
+      <Stack.Screen name="pest" component={PestControlService} options={{
+          header: ACSupplyHeader,
+        }}  />
 
       <Stack.Screen
         name="acsupplyservice"

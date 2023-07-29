@@ -93,14 +93,14 @@ const HomeStack: React.FC = () => {
       })}
     >
       <Stack.Screen name="home" component={HomeScreen} options={{ title: ' ' }} />
-      <Stack.Screen name="acservice" component={ACService} options={{ title: ' ' }} />
-      <Stack.Screen name="plumbing" component={PlumbingService} options={{ title: ' ' }} />
-      <Stack.Screen name="electric" component={ElectricalService} options={{ title: ' ' }} />
+      {/* <Stack.Screen name="acservice" component={ACService} options={{ title: ' ' }} /> */}
+      {/* <Stack.Screen name="plumbing" component={PlumbingService} options={{ title: ' ' }} /> */}
+      {/* <Stack.Screen name="electric" component={ElectricalService} options={{ title: ' ' }} />
       <Stack.Screen name="painting" component={PaintingService} options={{ title: ' ' }} />
       <Stack.Screen name="handyman" component={HandymanService} options={{ title: ' ' }} />
       <Stack.Screen name="carpentry" component={CarpentryService} options={{ title: ' ' }} />
       <Stack.Screen name="cleaning" component={CleaningService} options={{ title: ' ' }} />
-      <Stack.Screen name="pest" component={PestControlService} options={{ title: ' ' }} />
+      <Stack.Screen name="pest" component={PestControlService} options={{ title: ' ' }} /> */}
     </Stack.Navigator>
   );
 };

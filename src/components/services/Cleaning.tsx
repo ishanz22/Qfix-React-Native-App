@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,30 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+
+
+const BookButton = ({ onPress }) => {
+  return (
+    <TouchableOpacity style={styles.bookButton} onPress={onPress}>
+      {/* Chevron Left Icon */}
+
+      {/* Button Text */}
+      <View style={{flexDirection:'row', width:"100%",justifyContent:'space-between',alignItems:'center'}}>
+
+      <Text style={styles.bookButtonText}>Book Cleaner</Text>
+      <Text>{"   "}</Text>
+      <View style={styles.circle}>
+        <Ionicons name="chevron-forward" size={22} color="#3D4147" />
+      </View>
+      </View>
+    
+    </TouchableOpacity>
+  );
+};
 
 const Card = (props) => {
   const { imageSource, title } = props;
@@ -110,12 +131,32 @@ const CallOutCard = (props) => {
 };
 
 const Cleaning = () => {
+  const handleBookButtonPress = () => {
+    // Implement the desired action when the "Book" button is pressed
+    console.log("Book button pressed");
+    // For example, you can navigate to a booking screen:
+    // navigation.navigate("bookingScreen");
+  };
   const handleCardPress = (title) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
   };
+  const buttonAnimation = useRef(new Animated.Value(0)).current;
+  const animationConfig = {
+    toValue: 1,
+    duration: 1000,
+    useNativeDriver: false,
+    repeat: true,
+    reverse: true,
+  };
+
+  useEffect(() => {
+    Animated.loop(Animated.timing(buttonAnimation, animationConfig)).start();
+  }, [buttonAnimation]);
+
 
   return (
+    <>
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
         <Text
@@ -165,6 +206,25 @@ const Cleaning = () => {
         onPress={() => handleCardPress("Cleaning Call Out")}
       />
     </ScrollView>
+    
+<Animated.View
+style={[
+  styles.bookButtonContainer,
+  {
+    transform: [
+      {
+        translateY: buttonAnimation.interpolate({
+          inputRange: [0, 3],
+          outputRange: [0, 10],
+        }),
+      },
+    ],
+  },
+]}
+>
+<BookButton onPress={handleBookButtonPress} />
+</Animated.View>
+</>
   );
 };
 
@@ -254,6 +314,35 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: 26,
     color: "white",
+  },
+  bookButton: {
+    position: "absolute",
+    bottom: 30, // Adjust the bottom position as needed
+    flexDirection: "row", // To display icon and text side by side
+    alignItems: "center", // To vertically center the icon and text
+    alignSelf: "center",
+    backgroundColor: "#FBB92B",
+    borderRadius: 30,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    elevation: 4, // Add a shadow effect for Android
+    width: "60%",
+  },
+  bookButtonText: {
+    color: "#3D4147",
+    fontSize: 18,
+    fontWeight: "bold",
+ // Add a small space between the icon and text
+  },
+  circle: {
+    width: 28,
+    height: 28,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: "#3D4147",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    marginRight: 10, // Add a small space between the circle and text
   },
 });
 
