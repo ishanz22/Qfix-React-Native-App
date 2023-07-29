@@ -93,6 +93,26 @@ const ACSupplyHeader = ({ navigation }):any => (
   </View>
 );
 
+
+const BookingHeader = ({ navigation }):any => (
+  <View style={styles.headerContainer}>
+    <View style={styles.logoContainer}>
+    <Text style={{fontSize:24,color:'white',fontWeight:'bold',marginTop:10}}>Booking</Text>
+    </View>
+
+  
+
+    <View style={styles.cheveronWrapper}>
+      {/* Add the Expo vector icon here */}
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.cheveron}
+      >
+        <Ionicons name="chevron-back" size={27} color="#FBB92B" />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 const AnnualPackageHeader = ({ navigation }):any => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
@@ -143,6 +163,7 @@ const CartHeader = ({ navigation }):any => (
     </View>
   </View>
 );
+
 
 const CheckoutHeader = ({ navigation }) :any => (
   <View style={styles.headerContainer}>
@@ -201,7 +222,7 @@ const Router = () => {
           header: ACSupplyHeader,
         }}  />
     <Stack.Screen name="booking" component={BookingScreen} options={{
-          header: ACSupplyHeader,
+          header: BookingHeader,
         }}  />
       <Stack.Screen
         name="acsupplyservice"

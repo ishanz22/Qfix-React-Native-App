@@ -20,7 +20,7 @@ const BookButton = ({ onPress }) => {
       {/* Button Text */}
       <View style={{flexDirection:'row', width:"100%",justifyContent:'space-between',alignItems:'center'}}>
 
-      <Text style={styles.bookButtonText}>Book Pester </Text>
+      <Text style={styles.bookButtonText}>Book Now </Text>
       <Text>{"   "}</Text>
       <View style={styles.circle}>
         <Ionicons name="chevron-forward" size={22} color="#3D4147" />
@@ -323,14 +323,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#FBB92B",
     borderRadius: 30,
-    paddingVertical: 15,
+    paddingVertical: 11,
     paddingHorizontal: 30,
     elevation: 4, // Add a shadow effect for Android
-    width: "58%",
+    width: "50%",
   },
   bookButtonText: {
     color: "#3D4147",
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "bold",
  // Add a small space between the icon and text
   },
