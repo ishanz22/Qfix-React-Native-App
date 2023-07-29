@@ -19,7 +19,7 @@ const Card = (props) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
     props.onPress();
-    navigation.navigate("acsupplyservice");
+    // navigation.navigate("acsupplyservice");
   };
 
   return (
@@ -68,7 +68,7 @@ const CallOutCard = (props) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
     props.onPress();
-    navigation.navigate("acsupplyservice");
+    // navigation.navigate("acsupplyservice");
   };
 
   return (
@@ -109,6 +109,7 @@ const CallOutCard = (props) => {
   );
 };
 const ElectricServ = () => {
+  const navigation = useNavigation();
   const handleCardPress = (title) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
@@ -130,18 +131,18 @@ const ElectricServ = () => {
       </View>
       <Card
         imageSource={require("../../assets/acse.jpg")}
-        title="Plumbing Supply"
-        onPress={() => handleCardPress("A/C Supply")}
+        title="Electrical Supply"
+        onPress={() =>    navigation.navigate("electricsupply")}
       />
       <Card
         imageSource={require("../../assets/acc.webp")}
-        title="Plumbing Installation"
-        onPress={() => handleCardPress("A/C Installation")}
+        title="Electrical Installation"
+        onPress={() =>  navigation.navigate("electricinstall")}
       />
       <Card
         imageSource={require("../../assets/csz.jpg")}
-        title="Plumbing Repair"
-        onPress={() => handleCardPress("A/C Repair")}
+        title="Electrical Repair"
+        onPress={() =>  navigation.navigate("electricrepair")}
       />
 
       <View style={{ height: "3%" }} />

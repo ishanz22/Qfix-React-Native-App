@@ -24,6 +24,12 @@ import CleaningService from "../views/services/cleaning/CleaningService";
 import PestControlService from "../views/services/pest/PestControlService";
 import ACInstall from "../components/services/AC/ACInstall";
 import ACRepair from "../components/services/AC/ACRepair";
+import ElectricSupply from "../components/services/Electric/ElectricalSupply";
+import ElectricInstall from "../components/services/Electric/ElectricInstall";
+import ElectricRepair from "../components/services/Electric/ElectricalRepair";
+import PlumbingInstall from "../components/services/Plumbing/PlumbingInstall";
+import PlumbingRepair from "../components/services/Plumbing/PlumbingRepair";
+import PlumbingSupply from "../components/services/Plumbing/PlumbingSupply";
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -195,6 +201,51 @@ const Router = () => {
 <Stack.Screen
         name="acrepair"
         component={ACRepair}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+
+<Stack.Screen
+        name="electricsupply"
+        component={ElectricSupply}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+
+<Stack.Screen
+        name="electricinstall"
+        component={ElectricInstall}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+<Stack.Screen
+        name="electricrepair"
+        component={ElectricRepair}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+
+<Stack.Screen
+        name="plumbinginstall"
+        component={PlumbingInstall}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+<Stack.Screen
+        name="plumbingrepair"
+        component={PlumbingRepair}
+        options={{
+          header: ACSupplyHeader,
+        }}
+      />
+      <Stack.Screen
+        name="plumbingsupply"
+        component={PlumbingSupply}
         options={{
           header: ACSupplyHeader,
         }}

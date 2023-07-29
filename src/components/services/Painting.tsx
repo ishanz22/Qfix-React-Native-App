@@ -128,7 +128,7 @@ const Painting = () => {
           Painting Services
         </Text>
       </View>
-      <Card
+      {/* <Card
         imageSource={require("../../assets/acse.jpg")}
         title="painting Supply"
         onPress={() => handleCardPress("A/C Supply")}
@@ -156,12 +156,12 @@ const Painting = () => {
         >
           Emergencies
         </Text>
-      </View>
+      </View> */}
 
       <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
-        onPress={() => handleCardPress("A/C Repair")}
+        onPress={() => handleCardPress("Painting Call Out")}
       />
     </ScrollView>
   );

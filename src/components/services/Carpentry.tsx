@@ -68,7 +68,7 @@ const CallOutCard = (props) => {
     console.log(`Pressed ${title}`);
     // Perform the desired action when a card is pressed
     props.onPress();
-    navigation.navigate("acsupplyservice");
+    // navigation.navigate("acsupplyservice");
   };
 
   return (
@@ -129,7 +129,7 @@ const Carpentry = () => {
           Carpentry Services
         </Text>
       </View>
-      <Card
+      {/* <Card
         imageSource={require("../../assets/acse.jpg")}
         title="Carpentry Supply"
         onPress={() => handleCardPress("A/C Supply")}
@@ -157,12 +157,12 @@ const Carpentry = () => {
         >
           Emergencies
         </Text>
-      </View>
+      </View> */}
 
       <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
-        onPress={() => handleCardPress("A/C Repair")}
+        onPress={() => handleCardPress("Carpentry Call Out")}
       />
     </ScrollView>
   );
