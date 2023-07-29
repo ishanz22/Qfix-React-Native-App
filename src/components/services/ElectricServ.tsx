@@ -22,7 +22,7 @@ const BookButton = ({ onPress }) => {
       {/* Button Text */}
       <View style={{flexDirection:'row', width:"100%",justifyContent:'space-between',alignItems:'center'}}>
 
-      <Text style={styles.bookButtonText}>Book Electricians</Text>
+      <Text style={styles.bookButtonText}>Book Electrician</Text>
       <Text>{"   "}</Text>
       <View style={styles.circle}>
         <Ionicons name="chevron-forward" size={22} color="#3D4147" />
@@ -191,7 +191,7 @@ const ElectricServ = () => {
         onPress={() =>  navigation.navigate("electricrepair")}
       />
 
-      <View style={{ height: "3%" }} />
+      {/* <View style={{ height: "3%" }} />
       <View style={styles.headingContainer}>
         <Text
           style={{
@@ -209,7 +209,7 @@ const ElectricServ = () => {
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("A/C Repair")}
-      />
+      /> */}
     </ScrollView>
 
         
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     elevation: 4, // Add a shadow effect for Android
-    width: "70%",
+    width: "66%",
   },
   bookButtonText: {
     color: "#3D4147",

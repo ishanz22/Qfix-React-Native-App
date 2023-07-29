@@ -13,8 +13,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const BookButton = ({ onPress }) => {
+  const navigation = useNavigation();
+  
   return (
-    <TouchableOpacity style={styles.bookButton} onPress={onPress}>
+    <TouchableOpacity style={styles.bookButton} onPress={() => navigation.navigate("booking")}>
       {/* Chevron Left Icon */}
 
       {/* Button Text */}

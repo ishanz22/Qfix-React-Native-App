@@ -198,10 +198,16 @@ const Painting = () => {
         </Text>
       </View> */}
 
-      <CallOutCard
+      {/* <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("Painting Call Out")}
+      /> */}
+
+<Card
+        imageSource={require("../../assets/acse.jpg")}
+        title="painting Supply"
+        onPress={() => handleCardPress("A/C Supply")}
       />
     </ScrollView>
 

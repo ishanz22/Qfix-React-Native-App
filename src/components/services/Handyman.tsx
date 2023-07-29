@@ -198,10 +198,16 @@ const Handyman = () => {
         </Text>
       </View> */}
 
-      <CallOutCard
+      {/* <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("HandyMan Call Out")}
+      /> */}
+
+<Card
+        imageSource={require("../../assets/acse.jpg")}
+        title="Handyman Supply"
+        onPress={() => handleCardPress("A/C Supply")}
       />
     </ScrollView>
      <Animated.View

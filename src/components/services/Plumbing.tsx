@@ -187,7 +187,7 @@ const Plumbing = () => {
       />
 
       <View style={{ height: "3%" }} />
-      <View style={styles.headingContainer}>
+      {/* <View style={styles.headingContainer}>
         <Text
           style={{
             paddingHorizontal: 3,
@@ -198,13 +198,13 @@ const Plumbing = () => {
         >
           Emergencies
         </Text>
-      </View>
+      </View> */}
 
-      <CallOutCard
+      {/* <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("A/C Repair")}
-      />
+      /> */}
     </ScrollView>
       <Animated.View
       style={[

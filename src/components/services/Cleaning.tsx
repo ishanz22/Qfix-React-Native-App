@@ -200,10 +200,18 @@ const Cleaning = () => {
         </Text>
       </View> */}
 
-      <CallOutCard
+      
+
+      {/* <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("Cleaning Call Out")}
+      /> */}
+
+        <Card
+        imageSource={require("../../assets/acse.jpg")}
+        title="Cleaning Supply"
+        onPress={() => handleCardPress("A/C Supply")}
       />
     </ScrollView>
     

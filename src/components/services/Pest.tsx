@@ -194,11 +194,17 @@ const Pest = () => {
           Emergencies
         </Text>
       </View> */}
-
+{/* 
       <CallOutCard
         imageSource={require("../../assets/ad.jpg")}
         title="Call Out"
         onPress={() => handleCardPress("Pest Call Out")}
+      /> */}
+
+<Card
+        imageSource={require("../../assets/acse.jpg")}
+        title="Pest Supply"
+        onPress={() => handleCardPress("A/C Supply")}
       />
     </ScrollView>
     <Animated.View

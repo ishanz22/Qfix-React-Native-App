@@ -30,6 +30,7 @@ import ElectricRepair from "../components/services/Electric/ElectricalRepair";
 import PlumbingInstall from "../components/services/Plumbing/PlumbingInstall";
 import PlumbingRepair from "../components/services/Plumbing/PlumbingRepair";
 import PlumbingSupply from "../components/services/Plumbing/PlumbingSupply";
+import BookingScreen from "../views/services/booking/BookingScreen";
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -199,7 +200,9 @@ const Router = () => {
       <Stack.Screen name="pest" component={PestControlService} options={{
           header: ACSupplyHeader,
         }}  />
-
+    <Stack.Screen name="booking" component={BookingScreen} options={{
+          header: ACSupplyHeader,
+        }}  />
       <Stack.Screen
         name="acsupplyservice"
         component={ACSupplyService}
