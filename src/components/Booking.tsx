@@ -44,7 +44,6 @@ const Booking = () => {
       setHours(hours - 1);
     }
   };
-
   const showDatepicker = () => {
     setShowDatePicker(true);
     console.log("show date pressed");
@@ -96,6 +95,7 @@ const Booking = () => {
             hours: 1,
             selectedDate: "",
             selectedTime,
+            jobDescription: "",
           }}
           onSubmit={(values) => {
             // You can handle form submission here
@@ -105,6 +105,8 @@ const Booking = () => {
             console.log("Number of hours:", hours);
             console.log("date", selectedDate);
             console.log("Time:", formatTime(selectedTime));
+            console.log("Issue:", values.jobDescription);
+            console.log("Total Value:", acMechanics * 250 + hours * 250);
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -293,6 +295,30 @@ const Booking = () => {
                 <Text
                   style={[
                     styles.inputLabel,
+                    selectedItem === "jobDescription" &&
+                      styles.selectedInputLabel,
+                  ]}
+                >
+                  Issue
+                  <Text style={{ color: "red" }}> *</Text>
+                </Text>
+                <TextInput
+                  style={[
+                    styles.input,
+                    selectedItem === "jobDescription" && styles.selectedInput,
+                  ]}
+                  placeholder="Eg: Repair, Supply, Installation"
+                  placeholderTextColor="grey"
+                  value={values.jobDescription}
+                  onChangeText={handleChange("jobDescription")}
+                  onBlur={handleBlur("jobDescription")}
+                  onFocus={() => setSelectedItem("jobDescription")}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text
+                  style={[
+                    styles.inputLabel,
                     selectedItem === "hours" && styles.selectedInputLabel,
                   ]}
                 >
@@ -405,6 +431,30 @@ const Booking = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+
+              <View style={styles.totalContainer}>
+                <View style={styles.totalValueContainer}>
+                  <Text style={styles.totalLabel}>
+                    {acMechanics}{" "}
+                    {acMechanics === 1 ? "AC Mechanic" : "AC Mechanics"}
+                  </Text>
+                  <Text style={styles.totalValue}>{acMechanics * 250} AED</Text>
+                </View>
+                <View style={styles.totalValueContainer}>
+                  <Text style={styles.totalLabel}>
+                    {hours} {hours === 1 ? "Hour" : "Hours"}
+                  </Text>
+                  <Text style={styles.totalValue}>{hours * 250} AED</Text>
+                </View>
+                <View style={styles.separator} />
+                <View style={styles.totalValueContainer}>
+                  <Text style={styles.totalLast}>Total </Text>
+                  <Text style={styles.totalLast}>
+                    {acMechanics * 250 + hours * 250} AED
+                  </Text>
+                </View>
+              </View>
+
               <Button
                 onPress={handleSubmit}
                 title="Submit"
@@ -508,6 +558,35 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "white",
     borderWidth: 1,
+  },
+  totalContainer: {
+    marginTop: 20,
+    backgroundColor: "white",
+    padding: 15,
+    borderRadius: 5,
+  },
+  totalValueContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
+  totalLabel: {
+    fontSize: 16,
+    color: "#3D4147",
+  },
+  totalLast:{
+    fontSize: 20,
+    color: "#3D4147",
+    fontWeight:'bold'
+  },
+  totalValue: {
+    fontSize: 16,
+    color: "#3D4147",
+  },
+  separator: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#3D4147",
+    marginVertical: 10,
   },
 });
 
