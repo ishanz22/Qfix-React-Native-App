@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
+  Platform
 } from "react-native";
 import { Formik, useFormikContext } from "formik";
 import { Ionicons } from "@expo/vector-icons";
@@ -493,25 +494,25 @@ const Booking = () => {
                 </View>
 
                 <View style={styles.agreementContainer}>
-  <Text style={styles.agreementText}>
-    By placing this Booking, I agree to the
-  </Text>
-  <View
-  
-  >
-    <Text style={styles.linkText}>
-      terms and privacy policies
-    </Text>
-  </View>
-</View>
-
+                  <Text style={styles.agreementText}>
+                    By placing this Booking, I agree to the
+                  </Text>
+                  <View>
+                    <Text style={styles.linkText}>
+                      terms and privacy policies
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.containerBook}>
+                <TouchableOpacity    onPress={handleSubmit} style={styles.buttonBook}>
+                  <Text style={styles.buttonText}>Place Booking</Text>
+                </TouchableOpacity>
+              </View>
               </View>
 
-              <Button
-                onPress={handleSubmit}
-                title="Submit"
-                style={styles.button}
-              />
+            
+
+            
             </>
           )}
         </Formik>
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "white",
-    paddingVertical: 5,
+    paddingVertical: Platform.OS === "ios" ? 12 : 5,
     paddingHorizontal: 14,
     color: "#3D4147",
     backgroundColor: "white",
@@ -642,7 +643,6 @@ const styles = StyleSheet.create({
   },
 
   agreementContainer: {
- 
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -658,7 +658,25 @@ const styles = StyleSheet.create({
 
     marginLeft: 5,
   },
-  
+  containerBook: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop:10
+  },
+  buttonBook: {
+    width:"100%",
+    backgroundColor: "#1B98F5",
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
 
 export default Booking;
