@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { date } from "yup";
+import * as Yup from "yup";
 
 const Booking = () => {
   const [selectedItem, setSelectedItem] = useState("");
@@ -25,6 +26,7 @@ const Booking = () => {
 
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
+
   const incrementAcMechanics = () => {
     setAcMechanics(acMechanics + 1);
   };
@@ -97,6 +99,19 @@ const Booking = () => {
             selectedTime,
             jobDescription: "",
           }}
+          validationSchema={Yup.object().shape({
+            fullName: Yup.string().required("Full Name is required"),
+            phoneNumber: Yup.string()
+              .required("Phone Number is required")
+              .matches(/^\d+$/, "Phone Number must only contain digits"),
+            email: Yup.string()
+              .required("Email Address is required")
+              .email("Invalid Email Address"),
+            city: Yup.string().required("City is required"),
+            street: Yup.string().required("Street Address is required"),
+
+            jobDescription: Yup.string().required("Issue is required"),
+          })}
           onSubmit={(values) => {
             // You can handle form submission here
             console.log(values);
@@ -109,7 +124,7 @@ const Booking = () => {
             console.log("Total Value:", acMechanics * 250 + hours * 250);
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <>
               <Text
                 style={{
@@ -120,7 +135,6 @@ const Booking = () => {
                 }}
               >
                 Contact Information
-                <Text style={{ color: "red" }}> *</Text>
               </Text>
               <View style={styles.inputContainer}>
                 <Text
@@ -130,7 +144,6 @@ const Booking = () => {
                   ]}
                 >
                   Full Name
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -144,6 +157,11 @@ const Booking = () => {
                   onBlur={handleBlur("fullName")}
                   onFocus={() => setSelectedItem("fullName")}
                 />
+                {errors.fullName && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.fullName}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 <Text
@@ -153,7 +171,6 @@ const Booking = () => {
                   ]}
                 >
                   Phone Number
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -168,6 +185,11 @@ const Booking = () => {
                   keyboardType="phone-pad"
                   onFocus={() => setSelectedItem("phoneNumber")}
                 />
+                {errors.phoneNumber && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.phoneNumber}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 <Text
@@ -177,7 +199,6 @@ const Booking = () => {
                   ]}
                 >
                   Email Address
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -192,6 +213,11 @@ const Booking = () => {
                   keyboardType="email-address"
                   onFocus={() => setSelectedItem("email")}
                 />
+                {errors.email && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.email}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 <Text
@@ -201,7 +227,6 @@ const Booking = () => {
                   ]}
                 >
                   City
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -215,6 +240,11 @@ const Booking = () => {
                   onBlur={handleBlur("city")}
                   onFocus={() => setSelectedItem("city")}
                 />
+                {errors.city && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.city}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 <Text
@@ -224,7 +254,6 @@ const Booking = () => {
                   ]}
                 >
                   Street Address
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -238,6 +267,11 @@ const Booking = () => {
                   onBlur={handleBlur("street")}
                   onFocus={() => setSelectedItem("street")}
                 />
+                {errors.street && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.street}
+                  </Text>
+                )}
               </View>
 
               <View style={styles.inputContainer}>
@@ -300,7 +334,6 @@ const Booking = () => {
                   ]}
                 >
                   Issue
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <TextInput
                   style={[
@@ -314,6 +347,11 @@ const Booking = () => {
                   onBlur={handleBlur("jobDescription")}
                   onFocus={() => setSelectedItem("jobDescription")}
                 />
+                {errors.jobDescription && (
+                  <Text style={{ color: "#ff3333", fontSize: 13 }}>
+                    {errors.jobDescription}
+                  </Text>
+                )}
               </View>
               <View style={styles.inputContainer}>
                 <Text
@@ -390,6 +428,7 @@ const Booking = () => {
                     onFocus={() => setSelectedItem("selectedDate")}
                     editable={false}
                   />
+
                   <TouchableOpacity onPress={showDatepicker}>
                     <Ionicons
                       name="calendar-outline"
@@ -409,7 +448,6 @@ const Booking = () => {
                   ]}
                 >
                   Time
-                  <Text style={{ color: "red" }}> *</Text>
                 </Text>
                 <View style={styles.dateContainer}>
                   <TextInput
@@ -453,6 +491,20 @@ const Booking = () => {
                     {acMechanics * 250 + hours * 250} AED
                   </Text>
                 </View>
+
+                <View style={styles.agreementContainer}>
+  <Text style={styles.agreementText}>
+    By placing this Booking, I agree to the
+  </Text>
+  <View
+  
+  >
+    <Text style={styles.linkText}>
+      terms and privacy policies
+    </Text>
+  </View>
+</View>
+
               </View>
 
               <Button
@@ -574,10 +626,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#3D4147",
   },
-  totalLast:{
+  totalLast: {
     fontSize: 20,
     color: "#3D4147",
-    fontWeight:'bold'
+    fontWeight: "bold",
   },
   totalValue: {
     fontSize: 16,
@@ -588,6 +640,25 @@ const styles = StyleSheet.create({
     borderBottomColor: "#3D4147",
     marginVertical: 10,
   },
+
+  agreementContainer: {
+ 
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  agreementText: {
+    fontSize: 12,
+    color: "#3D4147",
+    textAlign: "center", // Center-align the text
+  },
+  linkText: {
+    fontSize: 12,
+    color: "#007BFF",
+
+    marginLeft: 5,
+  },
+  
 });
 
 export default Booking;
