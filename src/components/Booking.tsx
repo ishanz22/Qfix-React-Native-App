@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
-  Platform
+  Platform,
+  Alert
 } from "react-native";
 import { Formik, useFormikContext } from "formik";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,7 +17,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { date } from "yup";
 import * as Yup from "yup";
+import { collection, doc, setDoc } from "firebase/firestore";
 
+
+import { FIRESTORE_DB } from '../../firebaseConfig';
 const Booking = () => {
   const [selectedItem, setSelectedItem] = useState("");
   const [acMechanics, setAcMechanics] = useState(1);
@@ -84,6 +88,37 @@ const Booking = () => {
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
+  const handleSubmit = async (values) => {
+    try {
+      const fullName = values.fullName;
+  
+      // Create a reference for the document with the fullName as the document ID
+      const docRef = doc(FIRESTORE_DB, "bookings", fullName);
+  
+      // Save form data to Firestore with fullName as Document ID
+      await setDoc(docRef, {
+        fullName: fullName,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+        street: values.street,
+        city: values.city,
+        acMechanics: acMechanics,
+        hours: hours,
+        selectedDate: selectedDate.toISOString(),
+        selectedTime: formatTime(selectedTime),
+        jobDescription: values.jobDescription,
+        totalValue: acMechanics * 250 + hours * 250,
+      });
+  
+      console.log("Booking saved successfully!");
+      Alert.alert("Success", "Booking saved successfully!");
+    } catch (error) {
+      console.error("Error saving booking:", error);
+      Alert.alert("Error", "Error saving booking. Please try again later.");
+    }
+  };
+  
+
   return (
     <ScrollView>
       <View style={{ padding: 16 }}>
@@ -113,17 +148,7 @@ const Booking = () => {
 
             jobDescription: Yup.string().required("Issue is required"),
           })}
-          onSubmit={(values) => {
-            // You can handle form submission here
-            console.log(values);
-            console.log("Form values:", values);
-            console.log("Number of A/C Mechanics:", acMechanics);
-            console.log("Number of hours:", hours);
-            console.log("date", selectedDate);
-            console.log("Time:", formatTime(selectedTime));
-            console.log("Issue:", values.jobDescription);
-            console.log("Total Value:", acMechanics * 250 + hours * 250);
-          }}
+          onSubmit={handleSubmit}
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <>
