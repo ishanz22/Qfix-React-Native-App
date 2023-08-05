@@ -1,41 +1,66 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, ScrollView, StyleSheet, Text } from "react-native";
+import BookingCard from "../components/BookingCard";
 
-const CenteredText = () => {
+const BookingScreen = () => {
+  // Dummy data for testing
+  const bookings = [
+    {
+      fullName: "Kamal",
+      email: "test@gmail.com",
+      city: "Debai",
+      street: "Deira",
+      selectedDate: "2023-08-03",
+      selectedTime: "9.30",
+      issue: "ElectricRepair",
+      acMechanics: 1,
+      Purchase: 500,
+    },
+    {
+      fullName: "Kamal",
+      email: "test@gmail.com",
+      city: "Debai",
+      street: "Deira",
+      selectedDate: "2023-08-03",
+      selectedTime: "9.30",
+      issue: "ElectricRepair",
+      acMechanics: 1,
+      Purchase: 500,
+    },
+    // Add more dummy data here if you want to test with multiple cards
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.subText}>We're Building Something Awesome!❤️</Text>
+    <View style={{backgroundColor:'#3D4147'}}>
+
+
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.headingContainer}>
+        <Text style={styles.headingText}>Bookings</Text>
+      </View>
+      {bookings.map((booking, index) => (
+        <BookingCard key={index} {...booking} />
+      ))}
+    </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#3D4147",
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "white",
-  },
-  subText: {
     paddingHorizontal: 16,
-    fontSize: 20,
-    fontStyle: "italic",
-    color: "#555",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
+    backgroundColor: "#3D4147",
+    height: "100%",
   },
-  image: {
-    width: 300, // Set the width of your image
-    height: 300, // Set the height of your image
-    resizeMode: "contain", // Adjust the resizeMode as per your requirement
+  headingContainer: {
+    alignSelf: "flex-start",
+  },
+  headingText: {
+    fontSize: 26,
+    color: "white",
+    fontWeight: "bold",
+    paddingBottom: 10,
   },
 });
 
-export default CenteredText;
+export default BookingScreen;

@@ -27,7 +27,7 @@ function MainContainer() {
           } else if (route.name === "Screen2") {
             iconName = "settings";
           } else if (route.name === "Screen3") {
-            iconName = "person";
+            iconName = "document";
           }
 
           return <Ionicons name={iconName} size={size} color={iconColor} />;
@@ -41,7 +41,7 @@ function MainContainer() {
           } else if (route.name === "Screen2") {
             labelText = "Contracts"; // Change the label text for 'Screen2'
           } else if (route.name === "Screen3") {
-            labelText = "Support"; // Change the label text for 'Screen3'
+            labelText = "Bookings"; // Change the label text for 'Screen3'
           }
 
           return (
