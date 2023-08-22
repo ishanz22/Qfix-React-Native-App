@@ -1,9 +1,8 @@
 import React from "react";
-import { Platform } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { Platform,SafeAreaView } from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
 import Router from "./src/configurations/Router";
-import { SafeAreaView } from "react-native";
+import {  StatusBar as ExpoStatusBar } from "expo-status-bar"; // Import ExpoStatusBar
 import { useColorScheme } from 'react-native';
 
 const CustomDarkTheme = {
@@ -20,8 +19,9 @@ export default function App() {
   const isIOS = Platform.OS === "ios";
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#3D4147" }}>
-      {isIOS && <StatusBar style="light" />}
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#3D4147" ,paddingTop:40}}>
+      {/* Use ExpoStatusBar from expo-status-bar package */}
+      <ExpoStatusBar style={isIOS ? "light" : "auto"} backgroundColor="#3D4147" />
       <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : DefaultTheme}>
         <Router />
       </NavigationContainer>
