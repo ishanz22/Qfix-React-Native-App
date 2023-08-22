@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, signInWithEmailAndPassword, AuthCredential } from "firebase/auth";
 
@@ -19,18 +20,18 @@ const LoginScreen: React.FC = () => {
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const auth = getAuth();
 
   useEffect(() => {
-   const unsubscribe=  auth.onIdTokenChanged(user=>{
-      if(user){
+    const unsubscribe = auth.onIdTokenChanged((user) => {
+      if (user) {
         navigation.replace("MainContainer");
       }
-    })
-    return unsubscribe
-  }, [])
-  
+    });
+    return unsubscribe;
+  }, []);
 
   const handleLogin = () => {
     const credentials: AuthCredential = {
@@ -42,7 +43,6 @@ const LoginScreen: React.FC = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in successfully");
-    
       })
       .catch((error) => {
         console.error("Error logging in:", error);
@@ -87,16 +87,21 @@ const LoginScreen: React.FC = () => {
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="grey"
-            secureTextEntry
+            secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword
             onChangeText={(text) => setPassword(text)}
             value={password}
           />
-          <Icon
-            name="lock-outline"
-            size={20}
-            color="gray"
+      
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)} // Toggle the password visibility
             style={styles.icon}
-          />
+          >
+            <MaterialCommunityIcons
+              name={showPassword ? "eye-off" : "eye"}
+              size={20}
+              color="gray"
+            />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
           style={styles.forgotPass}
@@ -206,6 +211,10 @@ const styles = StyleSheet.create({
   loginIcon: {
     width: 180,
     height: 88,
+  },
+  icon: {
+    marginRight: 5,
+    padding: 5,
   },
 });
 

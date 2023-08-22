@@ -14,47 +14,45 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
-
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { FIRESTORE_DB } from "../../firebaseConfig";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 
 const SignUpScreen = () => {
-
-    const auth = getAuth();
-
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async () => {
-    try {
-      // Create user with email and password using Firebase authentication
-      await createUserWithEmailAndPassword(auth, email, password);
-  
-      // Get the current user
-      const user = auth.currentUser;
-  
-      // Save additional user data to Firebase Firestore
-      if (user) {
-        const userData = {
-          username,
-          email,
-          mobileNumber,
-        };
-  
-        // Save user data to Firestore using the previously defined FIRESTORE_DB
-        await setDoc(doc(FIRESTORE_DB, "users", user.uid), userData);
-        console.log("User registered and data saved to Firebase");
-      }
-    } catch (error) {
-      console.error("Error registering user:", error);
+ const handleLogin = async () => {
+  try {
+    // Create user with email and password using Firebase authentication
+    await createUserWithEmailAndPassword(auth, email, password);
+
+    // Get the current user
+    const user = auth.currentUser;
+
+    // Save additional user data to Firebase Firestore
+    if (user) {
+      const userData = {
+        username,
+        email,
+        mobileNumber,
+      };
+
+      // Save user data to Firestore using the previously defined FIRESTORE_DB
+      await setDoc(doc(FIRESTORE_DB, "users", user.uid), userData);
+      console.log("User registered and data saved to Firebase");
     }
-  };
-  
+  } catch (error) {
+    console.error("Error registering user:", error);
+  }
+};
+
 
   const handleForgotPassword = () => {
     // Add your logic for handling forgot password here
@@ -112,11 +110,20 @@ const SignUpScreen = () => {
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="grey"
-            secureTextEntry
+            secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword
             onChangeText={(text) => setPassword(text)}
             value={password}
           />
-          <Icon name="lock-outline" size={20} color="gray" style={styles.icon} />
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)} // Toggle the password visibility
+            style={styles.icon}
+          >
+            <MaterialCommunityIcons
+              name={showPassword ? "eye-off" : "eye"}
+              size={20}
+              color="gray"
+            />
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
