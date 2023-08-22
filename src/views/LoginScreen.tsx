@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   View,
   Text,
@@ -9,31 +9,45 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, AuthCredential } from "firebase/auth";
 
-const LoginScreen = () => {
+const LoginScreen: React.FC = () => {
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const auth = getAuth();
 
-  const handleLogin = async () => {
-    try {
-      // Sign in with email and password using Firebase authentication
-      await signInWithEmailAndPassword(auth, username, password);
+  useEffect(() => {
+   const unsubscribe=  auth.onIdTokenChanged(user=>{
+      if(user){
+        navigation.replace("MainContainer");
+      }
+    })
+    return unsubscribe
+  }, [])
   
-      // Successful login
-      console.log("Logged in successfully");
-      navigation.navigate("MainContainer");
-    } catch (error) {
-      console.error("Error logging in:", error);
-    }
+
+  const handleLogin = () => {
+    const credentials: AuthCredential = {
+      email: username,
+      password: password,
+    };
+
+    signInWithEmailAndPassword(auth, credentials.email, credentials.password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Logged in successfully");
+    
+      })
+      .catch((error) => {
+        console.error("Error logging in:", error);
+      });
   };
-  
 
   const handleForgotPassword = () => {
     console.log("Forgot Password clicked");
@@ -103,14 +117,16 @@ const LoginScreen = () => {
     );
   };
 
-  return Platform.OS === "ios" ? (
+  return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        {renderContent()}
-      </KeyboardAvoidingView>
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          {renderContent()}
+        </KeyboardAvoidingView>
+      ) : (
+        <View style={styles.container}>{renderContent()}</View>
+      )}
     </TouchableWithoutFeedback>
-  ) : (
-    <View style={styles.container}>{renderContent()}</View>
   );
 };
 

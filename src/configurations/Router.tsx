@@ -33,7 +33,6 @@ import PlumbingSupply from "../components/services/Plumbing/PlumbingSupply";
 import BookingScreen from "../views/services/booking/BookingScreen";
 import LoginScreen from "../views/LoginScreen";
 import SignUpScreen from "../views/SignUpScreen";
-
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -190,20 +189,15 @@ const CheckoutHeader = ({ navigation }): any => (
   </View>
 );
 const Router = () => {
-  
   return (
-    <Stack.Navigator initialRouteName="login">
-      <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
-      <Stack.Screen
-        name="signup"
-        component={SignUpScreen}
-        options={hideHeader}
-      />
+    <Stack.Navigator initialRouteName="MainContainer">
       <Stack.Screen
         name="MainContainer"
         component={MainContainer}
         options={hideHeader}
       />
+         <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
+         <Stack.Screen name="signup" component={SignUpScreen} options={hideHeader} />
       <Stack.Screen name="home" component={HomeScreen} options={hide} />
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
