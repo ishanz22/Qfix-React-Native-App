@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { View, Image, TouchableOpacity, StyleSheet,Text } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import MainContainer from "../navigations/MainContainer";
 import HomeScreen from "../views/HomeScreen";
@@ -31,6 +31,9 @@ import PlumbingInstall from "../components/services/Plumbing/PlumbingInstall";
 import PlumbingRepair from "../components/services/Plumbing/PlumbingRepair";
 import PlumbingSupply from "../components/services/Plumbing/PlumbingSupply";
 import BookingScreen from "../views/services/booking/BookingScreen";
+import LoginScreen from "../views/LoginScreen";
+import SignUpScreen from "../views/SignUpScreen";
+
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -49,8 +52,7 @@ const ACSupplyServiceHeader = ({ navigation }) => (
     <View style={styles.cartIconWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
-   
-        onPress={() =>   navigation.navigate('cartScreen')}
+        onPress={() => navigation.navigate("cartScreen")}
         style={styles.cartIcon}
       >
         <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
@@ -69,7 +71,7 @@ const ACSupplyServiceHeader = ({ navigation }) => (
   </View>
 );
 
-const ACSupplyHeader = ({ navigation }):any => (
+const ACSupplyHeader = ({ navigation }): any => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
       <Image
@@ -79,8 +81,6 @@ const ACSupplyHeader = ({ navigation }):any => (
       />
     </View>
 
-  
-
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
@@ -93,14 +93,20 @@ const ACSupplyHeader = ({ navigation }):any => (
   </View>
 );
 
-
-const BookingHeader = ({ navigation }):any => (
+const BookingHeader = ({ navigation }): any => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
-    <Text style={{fontSize:24,color:'white',fontWeight:'bold',marginTop:10}}>Booking</Text>
+      <Text
+        style={{
+          fontSize: 24,
+          color: "white",
+          fontWeight: "bold",
+          marginTop: 10,
+        }}
+      >
+        Booking
+      </Text>
     </View>
-
-  
 
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
@@ -113,7 +119,7 @@ const BookingHeader = ({ navigation }):any => (
     </View>
   </View>
 );
-const AnnualPackageHeader = ({ navigation }):any => (
+const AnnualPackageHeader = ({ navigation }): any => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
       <Image
@@ -126,7 +132,7 @@ const AnnualPackageHeader = ({ navigation }):any => (
     <View style={styles.cartIconWrapper}>
       {/* Add the Expo vector icon here */}
       <TouchableOpacity
-        onPress={() =>   navigation.navigate('cartScreen')}
+        onPress={() => navigation.navigate("cartScreen")}
         style={styles.cartIcon}
       >
         <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
@@ -144,13 +150,13 @@ const AnnualPackageHeader = ({ navigation }):any => (
     </View>
   </View>
 );
-const CartHeader = ({ navigation }):any => (
+const CartHeader = ({ navigation }): any => (
   <View style={[styles.headerContainer, styles.additionalStyle]}>
     <View style={styles.logoContainer}>
-      <Text style={{fontSize:24,color:'white',fontWeight:'bold'}}>Cart</Text>
+      <Text style={{ fontSize: 24, color: "white", fontWeight: "bold" }}>
+        Cart
+      </Text>
     </View>
-
-  
 
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
@@ -164,14 +170,13 @@ const CartHeader = ({ navigation }):any => (
   </View>
 );
 
-
-const CheckoutHeader = ({ navigation }) :any => (
+const CheckoutHeader = ({ navigation }): any => (
   <View style={styles.headerContainer}>
     <View style={styles.logoContainer}>
-      <Text style={{fontSize:24,color:'white',fontWeight:'bold'}}>Checkout</Text>
+      <Text style={{ fontSize: 24, color: "white", fontWeight: "bold" }}>
+        Checkout
+      </Text>
     </View>
-
-  
 
     <View style={styles.cheveronWrapper}>
       {/* Add the Expo vector icon here */}
@@ -185,8 +190,15 @@ const CheckoutHeader = ({ navigation }) :any => (
   </View>
 );
 const Router = () => {
+  
   return (
-    <Stack.Navigator initialRouteName="MainContainer">
+    <Stack.Navigator initialRouteName="login">
+      <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
+      <Stack.Screen
+        name="signup"
+        component={SignUpScreen}
+        options={hideHeader}
+      />
       <Stack.Screen
         name="MainContainer"
         component={MainContainer}
@@ -195,35 +207,71 @@ const Router = () => {
       <Stack.Screen name="home" component={HomeScreen} options={hide} />
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
-      <Stack.Screen name="acservice" component={ACService}   options={{
+      <Stack.Screen
+        name="acservice"
+        component={ACService}
+        options={{
           header: ACSupplyHeader,
-        }} />
-      <Stack.Screen name="plumbing" component={PlumbingService} options={{
+        }}
+      />
+      <Stack.Screen
+        name="plumbing"
+        component={PlumbingService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
+        }}
+      />
 
-        {/*  */}
-      <Stack.Screen name="electric" component={ElectricalService} options={{
+      {/*  */}
+      <Stack.Screen
+        name="electric"
+        component={ElectricalService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
-      <Stack.Screen name="painting" component={PaintingService}options={{
+        }}
+      />
+      <Stack.Screen
+        name="painting"
+        component={PaintingService}
+        options={{
           header: ACSupplyHeader,
-        }} />
-      <Stack.Screen name="handyman" component={HandymanService}options={{
+        }}
+      />
+      <Stack.Screen
+        name="handyman"
+        component={HandymanService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
-      <Stack.Screen name="carpentry" component={CarpentryService} options={{
+        }}
+      />
+      <Stack.Screen
+        name="carpentry"
+        component={CarpentryService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
-      <Stack.Screen name="cleaning" component={CleaningService} options={{
+        }}
+      />
+      <Stack.Screen
+        name="cleaning"
+        component={CleaningService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
-      <Stack.Screen name="pest" component={PestControlService} options={{
+        }}
+      />
+      <Stack.Screen
+        name="pest"
+        component={PestControlService}
+        options={{
           header: ACSupplyHeader,
-        }}  />
-    <Stack.Screen name="booking" component={BookingScreen} options={{
+        }}
+      />
+      <Stack.Screen
+        name="booking"
+        component={BookingScreen}
+        options={{
           header: BookingHeader,
-        }}  />
+        }}
+      />
       <Stack.Screen
         name="acsupplyservice"
         component={ACSupplyService}
@@ -232,7 +280,7 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="acinstall"
         component={ACInstall}
         options={{
@@ -240,7 +288,7 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="acrepair"
         component={ACRepair}
         options={{
@@ -248,7 +296,7 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="electricsupply"
         component={ElectricSupply}
         options={{
@@ -256,14 +304,14 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="electricinstall"
         component={ElectricInstall}
         options={{
           header: ACSupplyHeader,
         }}
       />
-<Stack.Screen
+      <Stack.Screen
         name="electricrepair"
         component={ElectricRepair}
         options={{
@@ -271,14 +319,14 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="plumbinginstall"
         component={PlumbingInstall}
         options={{
           header: ACSupplyHeader,
         }}
       />
-<Stack.Screen
+      <Stack.Screen
         name="plumbingrepair"
         component={PlumbingRepair}
         options={{
@@ -308,7 +356,7 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="restaurantAnnual"
         component={RestaurantAnnualPackages}
         options={{
@@ -316,30 +364,28 @@ const Router = () => {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="clinicAnnual"
         component={ClinicAnnualPackages}
         options={{
           header: AnnualPackageHeader,
         }}
       />
-   <Stack.Screen
+      <Stack.Screen
         name="cartScreen"
         component={CartScreen}
         options={{
           header: CartHeader,
         }}
       />
-{/*  */}
-<Stack.Screen
+      {/*  */}
+      <Stack.Screen
         name="checkout"
         component={Checkout}
         options={{
           header: CheckoutHeader,
         }}
       />
-
-
     </Stack.Navigator>
   );
 };
@@ -352,14 +398,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#3D4147",
-    paddingBottom:10
- 
+    paddingBottom: 10,
   },
   logoContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
- 
   },
   logo: {
     width: 100,
@@ -368,17 +412,15 @@ const styles = StyleSheet.create({
   cartIconWrapper: {
     position: "absolute",
     right: 15,
-
   },
   cheveronWrapper: {
     position: "absolute",
     left: 12,
-
   },
   cartIcon: {},
   cheveron: {},
-  additionalStyle:{
-    paddingTop:15,
-    paddingBottom:15
-  }
+  additionalStyle: {
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
 });

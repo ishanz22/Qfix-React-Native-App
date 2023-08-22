@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 import ServiceCard from "../components/ServiceCard";
-import { useNavigation } from "@react-navigation/native";
+  import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
