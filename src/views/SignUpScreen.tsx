@@ -1,65 +1,73 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  Image,
   Platform,
-  ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { FIRESTORE_DB } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword,getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { useFormik } from "formik"; // Import useFormik
+import * as Yup from "yup"; // Import Yup for validation
 
+import { FIRESTORE_DB } from "../../firebaseConfig";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
+
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  email:Yup.string().email("Invalid email").required("Email is required"),
+  mobileNumber: Yup.string().required("Mobile number is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
   const auth = getAuth();
+  const [showPassword, setShowPassword] = React.useState(false);
 
- const handleLogin = async () => {
-  try {
-    // Create user with email and password using Firebase authentication
-    await createUserWithEmailAndPassword(auth, email, password);
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      mobileNumber: "",
+      password: "",
+    },
+    validationSchema: validationSchema, // Set the validation schema
+    onSubmit: async (values) => {
+      try {
+        // Create user with email and password using Firebase authentication
+        await createUserWithEmailAndPassword(auth, values.email, values.password);
 
-    // Get the current user
-    const user = auth.currentUser;
+        // Get the current user
+        const user = auth.currentUser;
 
-    // Save additional user data to Firebase Firestore
-    if (user) {
-      const userData = {
-        username,
-        email,
-        mobileNumber,
-      };
+        // Save additional user data to Firebase Firestore
+        if (user) {
+          const userData = {
+            username: values.username,
+            email: values.email,
+            mobileNumber: values.mobileNumber,
+          };
 
-      // Save user data to Firestore using the previously defined FIRESTORE_DB
-      await setDoc(doc(FIRESTORE_DB, "users", user.uid), userData);
-      console.log("User registered and data saved to Firebase");
-    }
-  } catch (error) {
-    console.error("Error registering user:", error);
-  }
-};
-
-
-  const handleForgotPassword = () => {
-    // Add your logic for handling forgot password here
-    console.log("Forgot Password clicked");
-  };
+          // Save user data to Firestore using the previously defined FIRESTORE_DB
+          await setDoc(doc(FIRESTORE_DB, "users", user.uid), userData);
+          console.log("User registered and data saved to Firebase");
+        }
+      } catch (error) {
+        console.error("Error registering user:", error);
+      }
+    },
+  });
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -75,49 +83,76 @@ const SignUpScreen = () => {
           />
         </View>
 
+        {/* Username Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Username"
             placeholderTextColor="grey"
-            onChangeText={(text) => setUsername(text)}
-            value={username}
+            onChangeText={formik.handleChange("username")}
+            onBlur={formik.handleBlur("username")}
+            value={formik.values.username}
           />
           <Icon name="person-outline" size={20} color="gray" style={styles.icon} />
         </View>
-      
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.username && formik.errors.username ? (
+          <Text style={styles.errorText}>{formik.errors.username}</Text>
+        ) : null}
+            </View>
+            <Text>{' '}</Text>
+
+        {/* Email Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Email"
             placeholderTextColor="grey"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
+            onChangeText={formik.handleChange("email")}
+            onBlur={formik.handleBlur("email")}
+            value={formik.values.email}
           />
           <Icon name="email" size={20} color="gray" style={styles.icon} />
         </View>
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.email && formik.errors.email ? (
+          <Text style={styles.errorText}>{formik.errors.email}</Text>
+        ) : null}
+        </View>
+            <Text>{' '}</Text>
+
+        {/* Mobile Number Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Mobile Number"
             placeholderTextColor="grey"
-            onChangeText={(text) => setMobileNumber(text)}
-            value={mobileNumber}
+            onChangeText={formik.handleChange("mobileNumber")}
+            onBlur={formik.handleBlur("mobileNumber")}
+            value={formik.values.mobileNumber}
           />
           <Icon name="phone" size={20} color="gray" style={styles.icon} />
         </View>
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.mobileNumber && formik.errors.mobileNumber ? (
+          <Text style={styles.errorText}>{formik.errors.mobileNumber}</Text>
+        ) : null}
+            </View>
+            <Text>{' '}</Text>
 
+        {/* Password Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="grey"
             secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword
-            onChangeText={(text) => setPassword(text)}
-            value={password}
+            onChangeText={formik.handleChange("password")}
+            onBlur={formik.handleBlur("password")}
+            value={formik.values.password}
           />
           <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)} // Toggle the password visibility
+            onPress={() => setShowPassword(!showPassword)}
             style={styles.icon}
           >
             <MaterialCommunityIcons
@@ -127,10 +162,18 @@ const SignUpScreen = () => {
             />
           </TouchableOpacity>
         </View>
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.password && formik.errors.password ? (
+          <Text style={styles.errorText}>{formik.errors.password}</Text>
+        ) : null}
+             </View>
+            <Text>{' '}</Text>
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        {/* Register Button */}
+        <TouchableOpacity style={styles.loginButton} onPress={formik.handleSubmit}>
           <Text style={styles.loginButtonText}>Register</Text>
         </TouchableOpacity>
+
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("login")}>
@@ -142,13 +185,11 @@ const SignUpScreen = () => {
   };
 
   return Platform.OS === "ios" ? (
-
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         {renderContent()}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
-
   ) : (
     <View style={styles.container}>{renderContent()}</View>
   );
@@ -174,7 +215,7 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 20,
+  
   },
   input: {
     flex: 1,
@@ -228,6 +269,10 @@ const styles = StyleSheet.create({
   loginIcon: {
     width: 180,
     height: 88,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
   },
 });
 
