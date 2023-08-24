@@ -190,14 +190,15 @@ const CheckoutHeader = ({ navigation }): any => (
 );
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="MainContainer">
+    <Stack.Navigator >
+               <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
+         <Stack.Screen name="signup" component={SignUpScreen} options={hideHeader} />
       <Stack.Screen
         name="MainContainer"
         component={MainContainer}
         options={hideHeader}
       />
-         <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
-         <Stack.Screen name="signup" component={SignUpScreen} options={hideHeader} />
+
       <Stack.Screen name="home" component={HomeScreen} options={hide} />
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />

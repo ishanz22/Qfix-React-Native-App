@@ -15,47 +15,62 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, signInWithEmailAndPassword, AuthCredential } from "firebase/auth";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const LoginScreen: React.FC = () => {
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
+
+const LoginScreen = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
   const auth = getAuth();
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+      showPassword: false,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      const credentials = {
+        email: values.username,
+        password: values.password,
+      };
+
+      signInWithEmailAndPassword(auth, credentials.email, credentials.password)
+        .then((userCredentials) => {
+          const user = userCredentials.user;
+          console.log("Logged in successfully");
+          navigation.navigate("MainContainer");
+        })
+        .catch((error) => {
+          console.error("Error logging in:", error);
+        });
+    },
+  });
 
   useEffect(() => {
     const unsubscribe = auth.onIdTokenChanged((user) => {
       if (user) {
-        navigation.replace("MainContainer");
+        navigation.navigate("MainContainer"); // Navigate to MainContainer screen if user is logged in
       }
     });
+
     return unsubscribe;
   }, []);
 
-  const handleLogin = () => {
-    const credentials: AuthCredential = {
-      email: username,
-      password: password,
-    };
 
-    signInWithEmailAndPassword(auth, credentials.email, credentials.password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in successfully");
-      })
-      .catch((error) => {
-        console.error("Error logging in:", error);
-      });
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
   };
 
   const handleForgotPassword = () => {
     console.log("Forgot Password clicked");
   };
 
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
 
   const renderContent = () => {
     return (
@@ -72,44 +87,50 @@ const LoginScreen: React.FC = () => {
             style={styles.input}
             placeholder="Username"
             placeholderTextColor="grey"
-            onChangeText={(text) => setUsername(text)}
-            value={username}
+            onChangeText={formik.handleChange("username")}
+            onBlur={formik.handleBlur("username")}
+            value={formik.values.username}
           />
-          <Icon
-            name="person-outline"
-            size={20}
-            color="gray"
-            style={styles.icon}
-          />
+          <Icon name="person-outline" size={20} color="gray" style={styles.icon} />
         </View>
+
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.username && formik.errors.username ? (
+          <Text style={styles.errorText}>{formik.errors.username}</Text>
+        ) : null}
+              </View>
+              <Text>{' '}</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="grey"
-            secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword
-            onChangeText={(text) => setPassword(text)}
-            value={password}
+            secureTextEntry={!formik.values.showPassword}
+            onChangeText={formik.handleChange("password")}
+            onBlur={formik.handleBlur("password")}
+            value={formik.values.password}
           />
-      
+
           <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)} // Toggle the password visibility
+            onPress={() => formik.setFieldValue("showPassword", !formik.values.showPassword)}
             style={styles.icon}
           >
             <MaterialCommunityIcons
-              name={showPassword ? "eye-off" : "eye"}
+              name={formik.values.showPassword ? "eye-off" : "eye"}
               size={20}
               color="gray"
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.forgotPass}
-          onPress={handleForgotPassword}
-        >
+        <View style={{alignSelf:'flex-start'}}>
+        {formik.touched.password && formik.errors.password ? (
+          <Text  style={styles.errorText}>{formik.errors.password}</Text>
+        ) : null}
+             </View>
+        <TouchableOpacity style={styles.forgotPass} onPress={handleForgotPassword}>
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginButton} onPress={formik.handleSubmit}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
         <View style={styles.registerContainer}>
@@ -129,7 +150,9 @@ const LoginScreen: React.FC = () => {
           {renderContent()}
         </KeyboardAvoidingView>
       ) : (
-        <View style={styles.container}>{renderContent()}</View>
+        <View style={styles.container}>
+          {renderContent()}
+        </View>
       )}
     </TouchableWithoutFeedback>
   );
@@ -155,7 +178,7 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 20,
+   
     
   },
   input: {
@@ -215,6 +238,12 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 5,
     padding: 5,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    
+
   },
 });
 

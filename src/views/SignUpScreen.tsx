@@ -16,7 +16,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { FIRESTORE_DB } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword,getAuth } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 
@@ -27,6 +27,8 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const auth = getAuth();
 
  const handleLogin = async () => {
   try {
