@@ -10,13 +10,16 @@ import {
   Keyboard,
   Image,
   Platform,
+  ActivityIndicator
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth, signInWithEmailAndPassword, AuthCredential } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, AuthCredential,onAuthStateChanged } from "firebase/auth";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+
+
 
 const validationSchema = Yup.object().shape({
   username:Yup.string().email("Invalid email").required("Email is required"),
@@ -26,6 +29,21 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginScreen = () => {
+  const [loading, setLoading] = useState(true); 
+ 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("MainContainer");
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   const navigation = useNavigation();
   const auth = getAuth();
 
@@ -46,7 +64,7 @@ const LoginScreen = () => {
         .then((userCredentials) => {
           const user = userCredentials.user;
           console.log("Logged in successfully");
-          navigation.navigate("MainContainer");
+          navigation.replace("MainContainer");
         })
         .catch((error) => {
           console.error("Error logging in:", error);
@@ -54,15 +72,7 @@ const LoginScreen = () => {
     },
   });
 
-  useEffect(() => {
-    const unsubscribe = auth.onIdTokenChanged((user) => {
-      if (user) {
-        navigation.navigate("MainContainer"); // Navigate to MainContainer screen if user is logged in
-      }
-    });
 
-    return unsubscribe;
-  }, []);
 
 
   const dismissKeyboard = () => {
@@ -144,6 +154,15 @@ const LoginScreen = () => {
       </>
     );
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FFB923" />
+      </View>
+    );
+  }
+
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -244,6 +263,11 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 12,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
