@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, Text,Platform } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import MainContainer from "../navigations/MainContainer";
 import HomeScreen from "../views/HomeScreen";
@@ -190,7 +190,7 @@ const CheckoutHeader = ({ navigation }): any => (
 );
 const Router = () => {
   return (
-    <Stack.Navigator >
+    <Stack.Navigator  >
                <Stack.Screen name="login" component={LoginScreen} options={hideHeader} />
          <Stack.Screen name="signup" component={SignUpScreen} options={hideHeader} />
       <Stack.Screen
@@ -203,12 +203,42 @@ const Router = () => {
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
       <Stack.Screen
-        name="acservice"
-        component={ACService}
-        options={{
-          header: ACSupplyHeader,
-        }}
-      />
+  name="acservice"
+  component={ACService}
+  options={({ navigation }) => ({
+    header: () => (
+      <View style={Platform.OS === 'ios' ? { paddingTop: 5 } :  {paddingTop: 27 }}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.chevronIcon}
+        >
+           <Ionicons name="chevron-back" size={27} color="#FBB92B" />
+        </TouchableOpacity>
+
+        <View style={styles.headerCenter}>
+          <Image
+            source={require("../assets/qlogo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
+
+        <View style={styles.cartIconWrapper}>
+          <TouchableOpacity
+            onPress={() => navigation.openDrawer()}
+            style={styles.cartIcon}
+          >
+            <Ionicons name="ios-menu" size={27} color="#FBB92B" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      </View>
+    ),
+  })}
+/>
+
+
       <Stack.Screen
         name="plumbing"
         component={PlumbingService}
@@ -389,33 +419,31 @@ export default Router;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    height: 60,
+ // Adjust as needed
+  // Adjust as needed
     backgroundColor: "#3D4147",
-    paddingBottom: 10,
+    paddingBottom:10,
   },
-  logoContainer: {
+  chevronIcon: {
+    padding: 10,
+  },
+  headerCenter: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    alignItems: 'center',
   },
   logo: {
-    width: 100,
-    height: 50,
+    width: 100, // Adjust as needed
+    height: 50, // Adjust as needed
   },
   cartIconWrapper: {
-    position: "absolute",
-    right: 15,
+    justifyContent: 'center',
   },
-  cheveronWrapper: {
-    position: "absolute",
-    left: 12,
-  },
-  cartIcon: {},
-  cheveron: {},
-  additionalStyle: {
-    paddingTop: 15,
-    paddingBottom: 15,
+  cartIcon: {
+    padding: 10,
   },
 });

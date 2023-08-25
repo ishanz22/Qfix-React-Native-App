@@ -4,7 +4,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/
 import Router from "./src/configurations/Router";
 import {  StatusBar as ExpoStatusBar } from "expo-status-bar"; // Import ExpoStatusBar
 import { useColorScheme } from 'react-native';
-
+import DrawerMenu from "./src/components/DrawerMenu";
 const CustomDarkTheme = {
   ...DarkTheme,
   colors: {
@@ -19,11 +19,11 @@ export default function App() {
   const isIOS = Platform.OS === "ios";
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#3D4147" ,paddingTop:40}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#3D4147",paddingTop:0 }}>
       {/* Use ExpoStatusBar from expo-status-bar package */}
       <ExpoStatusBar style={isIOS ? "light" : "auto"} backgroundColor="#3D4147" />
       <NavigationContainer theme={scheme === 'dark' ? CustomDarkTheme : DefaultTheme}>
-        <Router />
+      <DrawerMenu component={Router}/>
       </NavigationContainer>
     </SafeAreaView>
   );

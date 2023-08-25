@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import { TouchableOpacity, View, Image, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, View, Image, StyleSheet, Text,Platform } from "react-native";
 import HomeScreen from "../views/HomeScreen";
 import ContractScreen from "../views/ContractScreen";
 import SupportScreen from "../views/SupportScreen";
@@ -17,7 +17,7 @@ function MainContainer() {
         tabBarActiveTintColor: "#FBB92B",
         tabBarStyle: { height: 70 },
         tabBarItemStyle: { backgroundColor: "#3D4147", padding: 10 },
-
+   
         tabBarIcon: ({ color, size, focused }) => {
           let iconName: string;
           let iconColor = focused ? "#FBB92B" : "white";
@@ -52,7 +52,11 @@ function MainContainer() {
             </Text>
           );
         },
+    
         header: ({ navigation }) => (
+          <View style={Platform.OS === 'ios' ? { paddingTop: 5 } :  {paddingTop: 27 }}>
+
+     
           <View style={styles.headerContainer}>
             <View style={styles.logoContainer}>
               <Image
@@ -65,14 +69,15 @@ function MainContainer() {
             <View style={styles.cartIconWrapper}>
               {/* Add the Expo vector icon here */}
               <TouchableOpacity
-                onPress={() => console.log("Cart icon pressed")}
+                onPress={() => navigation.openDrawer()}
                 
 
                 style={styles.cartIcon}
               >
-                <AntDesign name="shoppingcart" size={27} color="#FBB92B" />
+                <Ionicons name="ios-menu" size={27} color="#FBB92B" />
               </TouchableOpacity>
             </View>
+          </View>
           </View>
         ),
       })}
@@ -80,7 +85,7 @@ function MainContainer() {
       {/* <Tab.Screen name="Screen1" component={HomeScreen} /> */}
       <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeScreen}
         options={{
           tabBarLabel: ({ focused, color }) => (
             <Text
@@ -89,7 +94,7 @@ function MainContainer() {
               Home
             </Text>
           ),
-          headerShown: false,
+          // headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name="home"
@@ -131,6 +136,7 @@ const styles = StyleSheet.create({
   cartIconWrapper: {
     position: "absolute",
     right: 15,
+    
   
   },
   cartIcon: {},
