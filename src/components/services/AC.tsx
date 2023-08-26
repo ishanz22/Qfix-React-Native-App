@@ -6,10 +6,15 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
+  TextInput
 } from "react-native";
+
+import { Formik } from "formik";
+
 
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
+
 
 const AC = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,6 +23,9 @@ const AC = () => {
   const [selectedQuantity, setSelectedQuantity] = useState(0);
   const [isServiceSelected, setIsServiceSelected] = useState(false);
   const [isQuantitySet, setIsQuantitySet] = useState(false);
+  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
 
   const handleServiceClick = (service, cost) => {
     setSelectedService(service);
@@ -47,9 +55,11 @@ const AC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>AC Services Type & Quantity</Text>
+       
       </View>
+      {!showAdditionalInfo ? (
       <View style={styles.buttonContainer}>
+         <Text style={styles.headerText}>AC SERVICES TYPE & QUANTITY</Text>
         <View style={styles.buttonRow}>
           <TouchableOpacity
             onPress={() => handleServiceClick("AC Repair", 250)}
@@ -221,6 +231,129 @@ const AC = () => {
           </View>
         </Modal>
       </View>
+       ) : (
+        
+        <Formik
+  initialValues={{
+    address: "",
+    flatAptNo: "",
+    building: "",
+  }}
+  // validationSchema={validationSchema}
+  onSubmit={(values) => {
+    console.log(values);
+    setShowAdditionalInfo(false);
+    setSubmitAttempted(false); // Reset the submitAttempted flag
+  }}
+>
+  {({ handleChange, handleSubmit, values, errors, touched }) => (
+    <View style={{ width: "100%" }}>
+      <View style={styles.additionalInfoBox}>
+        <Text style={styles.inputLabel}>Address *</Text>
+        <TextInput
+          style={[
+            styles.input,
+         
+          ]}
+          onChangeText={handleChange("address")}
+          value={values.address}
+        />
+        {submitAttempted && !values.address && (
+          <Text style={styles.errorText}>Address is required</Text>
+        )}
+<View style={{paddingTop:20}}></View>
+        <View style={styles.inlineInputGroup}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Flat/Apt No *</Text>
+            <TextInput
+              style={[
+                styles.input,
+              
+              ]}
+              onChangeText={handleChange("flatAptNo")}
+              value={values.flatAptNo}
+            />
+            {submitAttempted && !values.flatAptNo && (
+              <Text style={styles.errorText}>Flat/Apt No is required</Text>
+            )}
+          </View>
+          <View style={[styles.inputGroup, styles.buildingInput]}>
+            <Text style={styles.inputLabel}>Building *</Text>
+            <TextInput
+              style={[
+                styles.input,
+             
+              ]}
+              onChangeText={handleChange("building")}
+              value={values.building}
+            />
+            {submitAttempted && !values.building && (
+              <Text style={styles.errorText}>Building is required</Text>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.inlineInputGroup}>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>Street</Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                   
+                    ]}
+                    // onChangeText={handleChange("flatAptNo")}
+        
+                  />
+               
+                </View>
+                <View style={[styles.inputGroup, styles.buildingInput]}>
+                  <Text style={styles.inputLabel}>Landmark</Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                 
+                    ]}
+          
+                  />
+                
+                </View>
+
+                
+              </View>
+        {/* ...Other form fields... */}
+
+        <TouchableOpacity
+          // style={styles.backToServiceButton}
+          onPress={() => setShowAdditionalInfo(false)}
+        >
+          <Text style={styles.backToServiceButtonTexti}>
+            Back to Service
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.backToServiceButton}
+          onPress={() => {
+            setSubmitAttempted(true);
+            // setShowAdditionalInfo(false);
+          }}
+        >
+          <Text style={styles.backToServiceButtonText}>
+            Add Address
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* ... */}
+    </View>
+  )}
+</Formik>
+
+
+
+      
+      
+      
+        )}
 
       {/* Booking Details Box */}
       <View style={styles.bookingDetailsBox}>
@@ -247,10 +380,15 @@ const AC = () => {
             selectedQuantity === 0 && styles.disabledButton,
           ]}
           disabled={selectedQuantity === 0}
+
+          onPress={() => setShowAdditionalInfo(true)} 
         >
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
       </View>
+
+
+   
     </View>
   );
 };
@@ -266,10 +404,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D4147",
   },
   headerText: {
-    fontSize: 23,
-    fontWeight: "bold",
+    fontSize: 19,
+    // fontWeight: "bold",
     color: "white",
     textAlign: "center",
+    paddingBottom:10,
+    letterSpacing: 1,
+    width:"100%"
   },
   buttonContainer: {
     paddingTop: 10,
@@ -397,6 +538,75 @@ const styles = StyleSheet.create({
   disabledButton: {
     color: "#3D4147", // Darker gray color for disabled button
     opacity: 0.6, // Adjust the opacity for a disabled look
+  },
+  additionalInfoBox: {
+    backgroundColor: "white",
+    padding: 20,
+    marginTop: 20,
+    borderRadius: 8,
+  },
+  input: {
+
+    borderBottomWidth: 1, 
+    borderColor: "#ccc", 
+    width:"100%"
+  },
+  inputAddress:{
+width:'100%',
+
+borderBottomWidth: 1, 
+borderColor: "#ccc", 
+  },
+  backToServiceButton: {
+    backgroundColor: "#FBB92B",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  
+  },
+  backToServiceButtonText: {
+    color: "#3D4147",
+    fontSize: 16,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  backToServiceButtonTexti:{
+    color: "#FBB92B",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "bold",
+    paddingBottom:10
+  },
+  inlineInputGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width:"100%",
+    marginBottom: 10,
+  
+  },
+  inputGroup: {
+    marginBottom: 10,
+    width:"40%",
+    // paddingTop:20
+  },
+  inputGroupAddress: {
+    // marginBottom: 10,
+    width:"100%",
+
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: "bold",
+    // marginBottom: 5,
+    color: "#3D4147",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 11,
+  },
+  errorInput: {
+    borderColor: "red",
+    // borderWidth: 1,
   },
 });
 
