@@ -207,7 +207,7 @@ const Router = () => {
   component={ACService}
   options={({ navigation }) => ({
     header: () => (
-      <View style={Platform.OS === 'ios' ? { paddingTop: 5 } :  {paddingTop: 27 }}>
+      <View style={Platform.OS === 'ios' ? { paddingTop: 5 } :  {paddingTop: 37 }}>
       <View style={styles.headerContainer}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}

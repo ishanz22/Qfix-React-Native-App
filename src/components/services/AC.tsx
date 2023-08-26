@@ -1,333 +1,403 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  ScrollView,
   TouchableOpacity,
-  Animated,
+  StyleSheet,
+  Dimensions,
+  Modal,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
-const BookButton = ({ onPress }) => {
-  const navigation = useNavigation();
-  
-  return (
-    <TouchableOpacity style={styles.bookButton} onPress={() => navigation.navigate("booking")}>
-      {/* Chevron Left Icon */}
+const screenWidth = Dimensions.get("window").width;
+const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
 
-      {/* Button Text */}
-      <View style={{flexDirection:'row', width:"100%",justifyContent:'space-between',alignItems:'center'}}>
+const AC = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
+  const [totalCost, setTotalCost] = useState(0);
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [isServiceSelected, setIsServiceSelected] = useState(false);
+  const [isQuantitySet, setIsQuantitySet] = useState(false);
 
-      <Text style={styles.bookButtonText}>Book Now</Text>
-      <Text>{"   "}</Text>
-      <View style={styles.circle}>
-        <Ionicons name="chevron-forward" size={22} color="#3D4147" />
-      </View>
-      </View>
-    
-    </TouchableOpacity>
-  );
-};
+  const handleServiceClick = (service, cost) => {
+    setSelectedService(service);
+    setTotalCost(cost);
+    setSelectedQuantity(0); // Reset the selected quantity
+    setIsServiceSelected(true);
+    setIsQuantitySet(false); // Reset the quantity set flag
+    setModalVisible(true);
+  };
 
-const Card = (props) => {
-  const { imageSource, title } = props;
-  const cardHeight = 90; // Adjust as needed
-  const navigation = useNavigation();
-  const handleCardPress = () => {
-    console.log(`Pressed ${title}`);
-    // Perform the desired action when a card is pressed
-    props.onPress();
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleModalButtonClick = (quantity) => {
+    setSelectedQuantity(quantity); // Update the selected quantity
+
+    // Calculate total cost based on quantity and selected service cost
+    const newTotalCost = quantity * totalCost; // Use the total cost
+    setTotalCost(newTotalCost);
+
+    setIsQuantitySet(true);
+
+    handleCloseModal();
   };
 
   return (
-    <>
-      <View style={[styles.cardContainer, { height: cardHeight }]}>
-        <TouchableOpacity onPress={handleCardPress} style={{ flex: 1 }}>
-          <Image
-            source={imageSource}
-            style={styles.cardImage}
-            resizeMode="cover"
-          />
-          <View style={styles.overlayBox}>
-            <View style={styles.cardTitleContainer}>
-              <Text style={styles.cardTitle}>{title}</Text>
-            </View>
-          </View>
-          <View style={[styles.textContainer, styles.iconContainer]}>
-            <View style={styles.cardTextContainer}>
-              <Ionicons
-                style={styles.cardText}
-                name="chevron-forward"
-                size={24}
-                color="#FBB92B"
-              />
-            </View>
-          </View>
-          <View
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>AC Services Type & Quantity</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("AC Repair", 250)}
             style={[
-              styles.additionalBox,
-              styles.triangleCorner,
-              { height: cardHeight },
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "AC Repair"
+                ? styles.selectedButton
+                : null,
             ]}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 5 }} />
-    </>
-  );
-};
-
-const CallOutCard = (props) => {
-  const { imageSource, title } = props;
-  const cardHeight = 90; // Adjust as needed
-  const navigation = useNavigation();
-  const handleCardPress = () => {
-    console.log(`Pressed ${title}`);
-    // Perform the desired action when a card is pressed
-    props.onPress();
-    navigation.navigate("acsupplyservice");
-  };
-
-  return (
-    <>
-      <View style={[styles.cardContainer, { height: cardHeight }]}>
-        <TouchableOpacity onPress={handleCardPress} style={{ flex: 1 }}>
-          <Image
-            source={imageSource}
-            style={styles.cardImage}
-            resizeMode="cover"
-          />
-          <View style={styles.overlayBox}>
-            <View style={styles.cardTitleContainer}>
-              <Text style={styles.cardTitle}>{title}</Text>
-            </View>
-          </View>
-          <View style={[styles.textContainer, styles.iconContainer]}>
-            <View style={styles.cardTextContainer}>
-              <Ionicons
-                style={styles.cardText}
-                name="chevron-forward"
-                size={24}
-                color="#FBB92B"
-              />
-            </View>
-          </View>
-          <View
-            style={[
-              styles.additionalBox,
-              styles.triangleCorner,
-              { height: cardHeight },
-            ]}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 5 }} />
-    </>
-  );
-};
-
-const FourCards = () => {
-  const handleBookButtonPress = () => {
-    // Implement the desired action when the "Book" button is pressed
-    console.log("Book button pressed");
-    // For example, you can navigate to a booking screen:
-    // navigation.navigate("bookingScreen");
-  };
-  const navigation = useNavigation();
-  const handleCardPress = (title) => {
-    console.log(`Pressed ${title}`);
-    // Perform the desired action when a card is pressed
-  };
-
-  const buttonAnimation = useRef(new Animated.Value(0)).current;
-  const animationConfig = {
-    toValue: 1,
-    duration: 1000,
-    useNativeDriver: false,
-    repeat: true,
-    reverse: true,
-  };
-
-  useEffect(() => {
-    Animated.loop(Animated.timing(buttonAnimation, animationConfig)).start();
-  }, [buttonAnimation]);
-
-  return (
-    <>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.headingContainer}>
-          <Text
-            style={{
-              paddingHorizontal: 3,
-              fontSize: 26,
-              color: "white",
-              fontWeight: "bold",
-            }}
           >
-            A/C Services
+            <Text style={styles.buttonText}>AC{"\n"}Repair</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => handleServiceClick("AC Soft Cleaning", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "AC Soft Cleaning"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>AC Soft{"\n"}Cleaning</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("AC Duct Cleaning", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "AC Duct Cleaning"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>AC Duct{"\n"}Cleaning</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("AC Deep Cleaning", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "AC Deep Cleaning"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>AC Deep{"\n"}Cleaning</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("AC Maintenance", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "AC Maintenance"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>AC{"\n"}Maintenance</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("Smart Installation", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "Smart Installation"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>Smart{"\n"}Installation</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            onPress={() => handleServiceClick("Standard Installation", 250)}
+            style={[
+              styles.button,
+              { width: buttonWidth },
+              isQuantitySet && selectedService === "Standard Installation"
+                ? styles.selectedButton
+                : null,
+            ]}
+          >
+            <Text style={styles.buttonText}>Standard{"\n"}Installation</Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={handleCloseModal}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text
+                style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}
+              >
+                Select Your Quantity
+              </Text>
+
+              <Text
+                style={{
+                  fontSize: 16,
+                  textAlign: "center",
+                  paddingBottom: 10,
+                  color: "#DAA520",
+                }}
+              >
+                ( 1 {selectedService} : 250AED )
+              </Text>
+
+              {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
+              Selected Service: 
+            </Text> */}
+              <View style={styles.gridContainer}>
+                {/* First Row */}
+                <TouchableOpacity
+                  onPress={() => handleModalButtonClick(1)}
+                  style={styles.modalButton}
+                >
+                  <Text style={styles.modalButtonText}>1</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleModalButtonClick(2)}
+                  style={styles.modalButton}
+                >
+                  <Text style={styles.modalButtonText}>2</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => handleModalButtonClick(3)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>3</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                 onPress={() => handleModalButtonClick(4)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>4</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                 onPress={() => handleModalButtonClick(5)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>5</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                   onPress={() => handleModalButtonClick(6)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>6</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                   onPress={() => handleModalButtonClick(7)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>7</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                 onPress={() => handleModalButtonClick(8)}
+                style={styles.modalButton}>
+                  <Text style={styles.modalButtonText}>8</Text>
+                </TouchableOpacity>
+                {/* Add more rows as needed */}
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+      {/* Booking Details Box */}
+      <View style={styles.bookingDetailsBox}>
+        <Text style={styles.bookingDetailsHeading}>BOOKING DETAILS</Text>
+
+        {selectedQuantity > 0 ? (
+          <View>
+            <Text style={styles.bookingDetailsText}>AC</Text>
+            <Text style={styles.bookingDetailsTextItem}>
+              {selectedService} (Quantity: {selectedQuantity})
+            </Text>
+            <View style={styles.separator}></View>
+          </View>
+        ) : null}
+
+        <View style={styles.totalBox}>
+          <Text style={styles.totalText}>
+            Total: AED {selectedQuantity > 0 ? totalCost : 0}
           </Text>
         </View>
-        <Card
-          imageSource={require("../../assets/acse.jpg")}
-          title="A/C Supply"
-          onPress={() => navigation.navigate("acsupplyservice")}
-        />
-        <Card
-          imageSource={require("../../assets/acc.webp")}
-          title="A/C Installation"
-          onPress={() => handleCardPress("A/C Installation")}
-          onPress={() => navigation.navigate("acinstall")}
-        />
-        <Card
-          imageSource={require("../../assets/csz.jpg")}
-          title="A/C Repair"
-          onPress={() => handleCardPress("A/C Repair")}
-          onPress={() => navigation.navigate("acrepair")}
-        />
-      </ScrollView>
-      <Animated.View
-        style={[
-          styles.bookButtonContainer,
-          {
-            transform: [
-              {
-                translateY: buttonAnimation.interpolate({
-                  inputRange: [0, 3],
-                  outputRange: [0, 10],
-                }),
-              },
-            ],
-          },
-        ]}
-      >
-        <BookButton onPress={handleBookButtonPress} />
-      </Animated.View>
-    </>
+        <TouchableOpacity
+          style={[
+            styles.continueButton,
+            selectedQuantity === 0 && styles.disabledButton,
+          ]}
+          disabled={selectedQuantity === 0}
+        >
+          <Text style={styles.continueButtonText}>Continue</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-
-    alignItems: "center",
-    // Adjust the vertical margin as needed
-  },
-  rectangle: {
-    width: 100 * 2,
-    height: 100,
-    // backgroundColor: 'red',
-  },
-  triangleCorner: {
-    width: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderRightWidth: 100,
-    borderTopWidth: 100,
-    borderRightColor: "transparent",
-    borderTopColor: "rgba(251, 185, 43, 0.89)",
-  },
-  cardContainer: {
-    width: "100%",
-    borderRadius: 10,
-    overflow: "hidden",
-    margin: 7,
-  },
-  cardImage: {
     flex: 1,
-    width: "100%",
+    backgroundColor: "#3D4147",
   },
-  overlayBox: {
-    position: "absolute",
-    width: "50%",
-    height: "100%",
-    backgroundColor: "rgba(251, 185, 43, 0.89)",
-    left: 0,
-  },
-  cardTitleContainer: {
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "flex-start",
+  header: {
+    paddingTop: 10,
     paddingLeft: 20,
+    backgroundColor: "#3D4147",
   },
-  cardTitle: {
-    fontSize: 16,
+  headerText: {
+    fontSize: 23,
     fontWeight: "bold",
     color: "white",
+    textAlign: "center",
   },
-  additionalBox: {
-    position: "absolute",
-    width: "20%",
-    backgroundColor: "rgba(255, 0, 0, 0.7)",
-    left: "50%",
-  },
-  textContainer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    height: "100%",
+  buttonContainer: {
+    paddingTop: 10,
     justifyContent: "center",
     alignItems: "center",
-    paddingRight: 20,
+    paddingHorizontal: 20,
   },
-  iconContainer: {
+  buttonRow: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    paddingBottom: 10,
   },
-  cardTextContainer: {
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "#FBB92B",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+  button: {
+    backgroundColor: "#007AFF",
+    borderRadius: 8,
+    paddingVertical: 9,
+    marginHorizontal: 5,
   },
-  cardText: {},
-  headingContainer: {
-    alignSelf: "flex-start",
-  },
-  headingText: {
-    fontSize: 26,
+  buttonText: {
+    textAlign: "center",
     color: "white",
+    fontSize: 14,
   },
-
-  bookButton: {
-    position: "absolute",
-    bottom: 30, // Adjust the bottom position as needed
-    flexDirection: "row", // To display icon and text side by side
-    alignItems: "center", // To vertically center the icon and text
-    alignSelf: "center",
-    backgroundColor: "#FBB92B",
-    borderRadius: 30,
-    paddingVertical: 11,
-    paddingHorizontal: 30,
-    elevation: 4, // Add a shadow effect for Android
-    width: "50%",
+  bookingDetailsBox: {
+    backgroundColor: "white", // Yellow color
+    alignItems: "center",
+    padding: 20,
+    marginTop: 20,
+    borderRadius: 8,
   },
-  bookButtonText: {
-    color: "#3D4147",
+  bookingDetailsHeading: {
     fontSize: 17,
     fontWeight: "bold",
- 
- // Add a small space between the icon and text
+    textAlign: "center",
+    color: "#3D4147",
   },
-  circle: {
-    width: 28,
-    height: 28,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "#3D4147",
+  bookingDetailsText: {
+    fontSize: 18,
+    color: "#FBB92B",
+    textAlign: "center",
+    paddingTop:10
+  },
+  bookingDetailsTextItem: {
+    fontSize: 15,
+    color: "#b28c1a",
+    textAlign: "center",
+    paddingTop: 5,
+  },
+  totalBox: {
+    backgroundColor: "rgba(251, 185, 43, 0.2)",
+    padding: 10,
+    // borderRadius: 8,
+    marginVertical: 10,
+    width: "100%",
+  },
+  totalText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#3D4147",
+  },
+  continueButton: {
+    backgroundColor: "#FBB92B",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 5,
+    width: "100%",
+  },
+  continueButtonText: {
+    color: "#3D4147",
+    fontSize: 16,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  separator: {
+    height: 2,
+    width: "100%",
+    backgroundColor: "rgba(251, 185, 43, 0.2)",
+    marginVertical: 5,
+  },
+  modalContainer: {
+    flex: 1,
     justifyContent: "center",
-    alignItems: "flex-end",
-    marginRight: 10, // Add a small space between the circle and text
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  modalButton: {
+    backgroundColor: "#3D4147",
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    width: "23.5%", // 2% gap for the wrap
+    paddingVertical: 10,
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 13,
+    textAlign: "center",
+  },
+  closeButton: {
+    backgroundColor: "#FBB92B",
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: "#3D4147",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  selectedButton: {
+    backgroundColor: "#FBB92B", // Change this to your desired color
+  },
+  disabledButton: {
+    color: "#3D4147", // Darker gray color for disabled button
+    opacity: 0.6, // Adjust the opacity for a disabled look
   },
 });
 
-export default FourCards;
+export default AC;
