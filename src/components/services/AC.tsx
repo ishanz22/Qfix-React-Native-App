@@ -244,8 +244,8 @@ const AC = () => {
     address: "",
     flatAptNo: "",
     building: "",
-    Street:"",
-    Landmark:""
+    street:"",
+    landmark:""
 
   }}
   // validationSchema={validationSchema}
@@ -313,7 +313,7 @@ const AC = () => {
                     ]}
                     // onChangeText={handleChange("flatAptNo")}
                     onChangeText={handleChange("street")}
-                    value={values.Street}
+                    value={values.street}
                   />
                
                 </View>
@@ -325,7 +325,7 @@ const AC = () => {
                  
                     ]}
                     onChangeText={handleChange("landmark")}
-                    value={values.Landmark}
+                    value={values.landmark}
                   />
                 
                 </View>
