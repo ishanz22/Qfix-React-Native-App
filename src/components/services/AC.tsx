@@ -52,6 +52,12 @@ const AC = () => {
     handleCloseModal();
   };
 
+  const handleSubmitForm = (values) => {
+    console.log("Form Data:", values); // Log the form data to the console
+
+  };
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -238,12 +244,16 @@ const AC = () => {
     address: "",
     flatAptNo: "",
     building: "",
+    Street:"",
+    Landmark:""
+
   }}
   // validationSchema={validationSchema}
   onSubmit={(values) => {
     console.log(values);
     setShowAdditionalInfo(false);
-    setSubmitAttempted(false); // Reset the submitAttempted flag
+    setSubmitAttempted(false);
+    // resetForm(); 
   }}
 >
   {({ handleChange, handleSubmit, values, errors, touched }) => (
@@ -302,7 +312,8 @@ const AC = () => {
                    
                     ]}
                     // onChangeText={handleChange("flatAptNo")}
-        
+                    onChangeText={handleChange("street")}
+                    value={values.Street}
                   />
                
                 </View>
@@ -313,7 +324,8 @@ const AC = () => {
                       styles.input,
                  
                     ]}
-          
+                    onChangeText={handleChange("landmark")}
+                    value={values.Landmark}
                   />
                 
                 </View>
@@ -336,6 +348,15 @@ const AC = () => {
           onPress={() => {
             setSubmitAttempted(true);
             // setShowAdditionalInfo(false);
+            // handleSubmit()
+            // handleSubmitForm(values); 
+
+            if (values.address && values.flatAptNo && values.building) {
+              handleSubmitForm(values); // Call the custom submit function
+              // setShowAdditionalInfo(false); // You can choose to keep this line if needed
+            } else {
+              console.log("Required fields are not filled ❌"); // Log a message for empty required fields
+            }
           }}
         >
           <Text style={styles.backToServiceButtonText}>
