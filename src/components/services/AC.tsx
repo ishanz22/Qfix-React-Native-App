@@ -28,6 +28,7 @@ const AC = () => {
   const [addressValue, setAddressValue] = useState(""); // Add this line
   const [isAddressAdded, setIsAddressAdded] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
 
   const [inputValues, setInputValues] = useState({
     address: "",
@@ -80,23 +81,131 @@ const AC = () => {
     setShowCalendar(false); // Hide the calendar
   };
 
+  const onDayPress = (day) => {
+    const currentDate = new Date();
+    const selectedDateTime = new Date(day.dateString);
+
+    if (selectedDateTime >= currentDate) {
+      setSelectedDate(day.dateString);
+      console.log('Selected date:', day.dateString);
+    }
+  };
+
+  const markedDates = {
+    [selectedDate]: { selected: true, marked: true },
+  };
+
+  const handleTimeSlotSelection = (selectedTime) => {
+    // Perform the necessary actions when a time slot is selected
+    console.log(`Selected time: ${selectedTime}`);
+  };
+  
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View style={styles.header}></View>
 
         {showCalendar ? (
-          <View style={styles.calendarBox}>
-            <View>
-              <Calendar />
-              <TouchableOpacity
-            
-                onPress={handleBackButtonClick}
-              >
-                <Text >Back</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+       <View style={styles.calendarBox}>
+       <View>
+         <Calendar 
+           onDayPress={onDayPress}
+           markedDates={markedDates}
+           minDate={new Date()}
+         />
+         <TouchableOpacity
+           onPress={handleBackButtonClick}
+         >
+           <Text>Back</Text>
+         </TouchableOpacity>
+       </View>
+       
+       <View style={styles.timeSlotsContainer}>
+         <View style={styles.separatorTime} />
+         <Text style={styles.headerTextTime}>What time should the service start?</Text>
+         
+         <View style={styles.timeSlotsGrid}>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection(1)}
+           >
+             <Text style={styles.timeSlotButtonText}>9:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection(2)}
+           >
+             <Text style={styles.timeSlotButtonText}>10:00 AM</Text>
+           </TouchableOpacity>
+
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("8:00 AM")}
+           >
+             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+           </TouchableOpacity>
+           {/* ... and so on for the rest of the time slots */}
+         </View>
+       </View>
+     </View>
+     
         ) : !showAdditionalInfo ? (
           <View style={styles.buttonContainer}>
             <Text style={styles.headerText}>AC SERVICES TYPE & QUANTITY</Text>
@@ -698,6 +807,35 @@ const styles = StyleSheet.create({
     padding: 15,
     marginTop: 10,
     // Other calendar box styles...
+  },
+  headerTextTime:{
+    fontSize: 17,
+    // fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  separatorTime:{
+    height: 1,
+    backgroundColor: '#E0E0E0', // Light gray color
+    marginBottom: 10,
+    
+  },
+  timeSlotsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+
+  timeSlotButton: {
+    width: '33.33%', // 3 buttons in a row
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0', // Light gray color
+  },
+
+  timeSlotButtonText: {
+    fontSize: 16,
+    color: '#333333',
   },
 });
 
