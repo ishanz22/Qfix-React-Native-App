@@ -6,15 +6,15 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
-  TextInput
+  TextInput,
+  ScrollView,
 } from "react-native";
 
 import { Formik } from "formik";
 
-
+import { Calendar } from "react-native-calendars";
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
-
 
 const AC = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,7 +25,17 @@ const AC = () => {
   const [isQuantitySet, setIsQuantitySet] = useState(false);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [addressValue, setAddressValue] = useState(""); // Add this line
+  const [isAddressAdded, setIsAddressAdded] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
+  const [inputValues, setInputValues] = useState({
+    address: "",
+    flatAptNo: "",
+    building: "",
+    street: "",
+    landmark: "",
+  });
 
   const handleServiceClick = (service, cost) => {
     setSelectedService(service);
@@ -54,363 +64,418 @@ const AC = () => {
 
   const handleSubmitForm = (values) => {
     console.log("Form Data:", values); // Log the form data to the console
-
+    setAddressValue(values.address); // Add this line
+    setIsAddressAdded(true);
+    setInputValues(values);
   };
-  
+
+  const handleContinue1ButtonClick = () => {
+    setShowAdditionalInfo(false); // Hide the additional info form
+    setShowCalendar(!showCalendar); // Toggle the calendar
+    // Toggle the showCalendar state
+  };
+
+  const handleBackButtonClick = () => {
+    setShowAdditionalInfo(true); // Show the additional info section
+    setShowCalendar(false); // Hide the calendar
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-       
-      </View>
-      {!showAdditionalInfo ? (
-      <View style={styles.buttonContainer}>
-         <Text style={styles.headerText}>AC SERVICES TYPE & QUANTITY</Text>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("AC Repair", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "AC Repair"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>AC{"\n"}Repair</Text>
-          </TouchableOpacity>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <View style={styles.header}></View>
 
-          <TouchableOpacity
-            onPress={() => handleServiceClick("AC Soft Cleaning", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "AC Soft Cleaning"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>AC Soft{"\n"}Cleaning</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("AC Duct Cleaning", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "AC Duct Cleaning"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>AC Duct{"\n"}Cleaning</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("AC Deep Cleaning", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "AC Deep Cleaning"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>AC Deep{"\n"}Cleaning</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("AC Maintenance", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "AC Maintenance"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>AC{"\n"}Maintenance</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("Smart Installation", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "Smart Installation"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>Smart{"\n"}Installation</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            onPress={() => handleServiceClick("Standard Installation", 250)}
-            style={[
-              styles.button,
-              { width: buttonWidth },
-              isQuantitySet && selectedService === "Standard Installation"
-                ? styles.selectedButton
-                : null,
-            ]}
-          >
-            <Text style={styles.buttonText}>Standard{"\n"}Installation</Text>
-          </TouchableOpacity>
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={handleCloseModal}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text
-                style={{ fontSize: 20, textAlign: "center", paddingBottom: 10 }}
+        {showCalendar ? (
+          <View style={styles.calendarBox}>
+            <View>
+              <Calendar />
+              <TouchableOpacity
+            
+                onPress={handleBackButtonClick}
               >
-                Select Your Quantity
-              </Text>
-
-              <Text
-                style={{
-                  fontSize: 16,
-                  textAlign: "center",
-                  paddingBottom: 10,
-                  color: "#DAA520",
-                }}
-              >
-                ( 1 {selectedService} : 250AED )
-              </Text>
-
-              {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
-              Selected Service: 
-            </Text> */}
-              <View style={styles.gridContainer}>
-                {/* First Row */}
-                <TouchableOpacity
-                  onPress={() => handleModalButtonClick(1)}
-                  style={styles.modalButton}
-                >
-                  <Text style={styles.modalButtonText}>1</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleModalButtonClick(2)}
-                  style={styles.modalButton}
-                >
-                  <Text style={styles.modalButtonText}>2</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => handleModalButtonClick(3)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>3</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                 onPress={() => handleModalButtonClick(4)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>4</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                 onPress={() => handleModalButtonClick(5)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>5</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                   onPress={() => handleModalButtonClick(6)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>6</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                   onPress={() => handleModalButtonClick(7)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>7</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                 onPress={() => handleModalButtonClick(8)}
-                style={styles.modalButton}>
-                  <Text style={styles.modalButtonText}>8</Text>
-                </TouchableOpacity>
-                {/* Add more rows as needed */}
-              </View>
+                <Text >Back</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </View>
-       ) : (
-        
-        <Formik
-  initialValues={{
-    address: "",
-    flatAptNo: "",
-    building: "",
-    street:"",
-    landmark:""
+        ) : !showAdditionalInfo ? (
+          <View style={styles.buttonContainer}>
+            <Text style={styles.headerText}>AC SERVICES TYPE & QUANTITY</Text>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("AC Repair", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "AC Repair"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>AC{"\n"}Repair</Text>
+              </TouchableOpacity>
 
-  }}
-  // validationSchema={validationSchema}
-  onSubmit={(values) => {
-    console.log(values);
-    setShowAdditionalInfo(false);
-    setSubmitAttempted(false);
-    // resetForm(); 
-  }}
->
-  {({ handleChange, handleSubmit, values, errors, touched }) => (
-    <View style={{ width: "100%" }}>
-      <View style={styles.additionalInfoBox}>
-        <Text style={styles.inputLabel}>Address *</Text>
-        <TextInput
-          style={[
-            styles.input,
-         
-          ]}
-          onChangeText={handleChange("address")}
-          value={values.address}
-        />
-        {submitAttempted && !values.address && (
-          <Text style={styles.errorText}>Address is required</Text>
-        )}
-<View style={{paddingTop:20}}></View>
-        <View style={styles.inlineInputGroup}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Flat/Apt No *</Text>
-            <TextInput
-              style={[
-                styles.input,
-              
-              ]}
-              onChangeText={handleChange("flatAptNo")}
-              value={values.flatAptNo}
-            />
-            {submitAttempted && !values.flatAptNo && (
-              <Text style={styles.errorText}>Flat/Apt No is required</Text>
-            )}
-          </View>
-          <View style={[styles.inputGroup, styles.buildingInput]}>
-            <Text style={styles.inputLabel}>Building *</Text>
-            <TextInput
-              style={[
-                styles.input,
-             
-              ]}
-              onChangeText={handleChange("building")}
-              value={values.building}
-            />
-            {submitAttempted && !values.building && (
-              <Text style={styles.errorText}>Building is required</Text>
-            )}
-          </View>
-        </View>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("AC Soft Cleaning", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "AC Soft Cleaning"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>AC Soft{"\n"}Cleaning</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("AC Duct Cleaning", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "AC Duct Cleaning"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>AC Duct{"\n"}Cleaning</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("AC Deep Cleaning", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "AC Deep Cleaning"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>AC Deep{"\n"}Cleaning</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("AC Maintenance", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "AC Maintenance"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>AC{"\n"}Maintenance</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("Smart Installation", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "Smart Installation"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>Smart{"\n"}Installation</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={() => handleServiceClick("Standard Installation", 250)}
+                style={[
+                  styles.button,
+                  { width: buttonWidth },
+                  isQuantitySet && selectedService === "Standard Installation"
+                    ? styles.selectedButton
+                    : null,
+                ]}
+              >
+                <Text style={styles.buttonText}>
+                  Standard{"\n"}Installation
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={handleCloseModal}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      textAlign: "center",
+                      paddingBottom: 10,
+                    }}
+                  >
+                    Select Your Quantity
+                  </Text>
 
-        <View style={styles.inlineInputGroup}>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.inputLabel}>Street</Text>
-                  <TextInput
-                    style={[
-                      styles.input,
-                   
-                    ]}
-                    // onChangeText={handleChange("flatAptNo")}
-                    onChangeText={handleChange("street")}
-                    value={values.street}
-                  />
-               
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textAlign: "center",
+                      paddingBottom: 10,
+                      color: "#DAA520",
+                    }}
+                  >
+                    ( 1 {selectedService} : 250AED )
+                  </Text>
+
+                  {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
+              Selected Service: 
+            </Text> */}
+                  <View style={styles.gridContainer}>
+                    {/* First Row */}
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(1)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>1</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(2)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>2</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(3)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>3</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(4)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>4</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(5)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>5</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(6)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>6</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(7)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>7</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleModalButtonClick(8)}
+                      style={styles.modalButton}
+                    >
+                      <Text style={styles.modalButtonText}>8</Text>
+                    </TouchableOpacity>
+                    {/* Add more rows as needed */}
+                  </View>
                 </View>
-                <View style={[styles.inputGroup, styles.buildingInput]}>
-                  <Text style={styles.inputLabel}>Landmark</Text>
-                  <TextInput
-                    style={[
-                      styles.input,
-                 
-                    ]}
-                    onChangeText={handleChange("landmark")}
-                    value={values.landmark}
-                  />
-                
-                </View>
-
-                
               </View>
-        {/* ...Other form fields... */}
-
-        <TouchableOpacity
-          // style={styles.backToServiceButton}
-          onPress={() => setShowAdditionalInfo(false)}
-        >
-          <Text style={styles.backToServiceButtonTexti}>
-            Back to Service
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.backToServiceButton}
-          onPress={() => {
-            setSubmitAttempted(true);
-            // setShowAdditionalInfo(false);
-            // handleSubmit()
-            // handleSubmitForm(values); 
-
-            if (values.address && values.flatAptNo && values.building) {
-              handleSubmitForm(values); // Call the custom submit function
-              // setShowAdditionalInfo(false); // You can choose to keep this line if needed
-            } else {
-              console.log("Required fields are not filled ❌"); // Log a message for empty required fields
-            }
-          }}
-        >
-          <Text style={styles.backToServiceButtonText}>
-            Add Address
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {/* ... */}
-    </View>
-  )}
-</Formik>
-
-
-
-      
-      
-      
-        )}
-
-      {/* Booking Details Box */}
-      <View style={styles.bookingDetailsBox}>
-        <Text style={styles.bookingDetailsHeading}>BOOKING DETAILS</Text>
-
-        {selectedQuantity > 0 ? (
-          <View>
-            <Text style={styles.bookingDetailsText}>AC</Text>
-            <Text style={styles.bookingDetailsTextItem}>
-              {selectedService} (Quantity: {selectedQuantity})
-            </Text>
-            <View style={styles.separator}></View>
+            </Modal>
           </View>
-        ) : null}
+        ) : (
+          <Formik
+            initialValues={inputValues}
+            // validationSchema={validationSchema}
+            onSubmit={(values) => {
+              console.log(values);
+              setShowAdditionalInfo(false);
+              setSubmitAttempted(false);
+            }}
+          >
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
+              <View style={{ width: "100%" }}>
+                <View style={styles.additionalInfoBox}>
+                  <Text style={styles.inputLabel}>Address *</Text>
+                  <TextInput
+                    style={[styles.input]}
+                    placeholder="123 Sheikh Zayed Road, Dubai Marina"
+                    onChangeText={handleChange("address")}
+                    value={values.address}
+                  />
+                  {submitAttempted && !values.address && (
+                    <Text style={styles.errorText}>Address is required</Text>
+                  )}
+                  <View style={{ paddingTop: 20 }}></View>
+                  <View style={styles.inlineInputGroup}>
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Flat/Apt No *</Text>
+                      <TextInput
+                        style={[styles.input]}
+                        onChangeText={handleChange("flatAptNo")}
+                        value={values.flatAptNo}
+                        placeholder="301"
+                      />
+                      {submitAttempted && !values.flatAptNo && (
+                        <Text style={styles.errorText}>
+                          Flat/Apt No is required
+                        </Text>
+                      )}
+                    </View>
+                    <View style={[styles.inputGroup, styles.buildingInput]}>
+                      <Text style={styles.inputLabel}>Building *</Text>
+                      <TextInput
+                        style={[styles.input]}
+                        placeholder="SBK"
+                        onChangeText={handleChange("building")}
+                        value={values.building}
+                      />
+                      {submitAttempted && !values.building && (
+                        <Text style={styles.errorText}>
+                          Building is required
+                        </Text>
+                      )}
+                    </View>
+                  </View>
 
-        <View style={styles.totalBox}>
-          <Text style={styles.totalText}>
-            Total: AED {selectedQuantity > 0 ? totalCost : 0}
-          </Text>
+                  <View style={styles.inlineInputGroup}>
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Street</Text>
+                      <TextInput
+                        style={[styles.input]}
+                        // onChangeText={handleChange("flatAptNo")}
+                        placeholder=" Sheikh Zayed"
+                        onChangeText={handleChange("street")}
+                        value={values.street}
+                      />
+                    </View>
+                    <View style={[styles.inputGroup, styles.buildingInput]}>
+                      <Text style={styles.inputLabel}>Landmark</Text>
+                      <TextInput
+                        style={[styles.input]}
+                        placeholder="Dubai Mall"
+                        onChangeText={handleChange("landmark")}
+                        value={values.landmark}
+                      />
+                    </View>
+                  </View>
+                  {/* ...Other form fields... */}
+
+                  <TouchableOpacity
+                    // style={styles.backToServiceButton}
+                    onPress={() => setShowAdditionalInfo(false)}
+                  >
+                    <Text style={styles.backToServiceButtonTexti}>
+                      Back to Service
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.backToServiceButton}
+                    onPress={() => {
+                      setSubmitAttempted(true);
+                      // setShowAdditionalInfo(false);
+                      // handleSubmit()
+                      // handleSubmitForm(values);
+
+                      if (
+                        values.address &&
+                        values.flatAptNo &&
+                        values.building
+                      ) {
+                        handleSubmitForm(values); // Call the custom submit function
+                        // setShowAdditionalInfo(false); // You can choose to keep this line if needed
+                      } else {
+                        console.log("Required fields are not filled ❌"); // Log a message for empty required fields
+                      }
+                    }}
+                  >
+                    <Text style={styles.backToServiceButtonText}>
+                      Add Address
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {/* ... */}
+              </View>
+            )}
+          </Formik>
+        )}
+        {/*  */}
+        {/* Booking Details Box */}
+        <View style={styles.bookingDetailsBox}>
+          <Text style={styles.bookingDetailsHeading}>BOOKING DETAILS</Text>
+
+          {selectedQuantity > 0 ? (
+            <View>
+              <Text style={styles.bookingDetailsText}>AC</Text>
+              <Text style={styles.bookingDetailsTextItem}>
+                {selectedService} (Quantity: {selectedQuantity})
+              </Text>
+
+              {addressValue && (
+                <View
+                  style={{
+                    paddingTop: 5,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    width: "80%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                    }}
+                  >
+                    Address:{" "}
+                  </Text>
+                  <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {addressValue}
+                  </Text>
+                </View>
+              )}
+
+              <View style={styles.separator}></View>
+            </View>
+          ) : null}
+
+          <View style={styles.totalBox}>
+            <Text style={styles.totalText}>
+              Total: AED {selectedQuantity > 0 ? totalCost : 0}
+            </Text>
+          </View>
+          {showAdditionalInfo ? (
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                !addressValue && styles.disabledButton,
+              ]}
+              disabled={!addressValue}
+              onPress={handleContinue1ButtonClick}
+            >
+              <Text style={styles.continueButtonText}>Continue1</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                selectedQuantity === 0 && styles.disabledButton,
+              ]}
+              disabled={selectedQuantity === 0}
+              onPress={() => setShowAdditionalInfo(true)}
+            >
+              <Text style={styles.continueButtonText}>Continue</Text>
+            </TouchableOpacity>
+          )}
         </View>
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            selectedQuantity === 0 && styles.disabledButton,
-          ]}
-          disabled={selectedQuantity === 0}
-
-          onPress={() => setShowAdditionalInfo(true)} 
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
       </View>
-
-
-   
-    </View>
+    </ScrollView>
   );
 };
 
@@ -429,9 +494,9 @@ const styles = StyleSheet.create({
     // fontWeight: "bold",
     color: "white",
     textAlign: "center",
-    paddingBottom:10,
+    paddingBottom: 10,
     letterSpacing: 1,
-    width:"100%"
+    width: "100%",
   },
   buttonContainer: {
     paddingTop: 10,
@@ -471,7 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#FBB92B",
     textAlign: "center",
-    paddingTop:10
+    paddingTop: 10,
   },
   bookingDetailsTextItem: {
     fontSize: 15,
@@ -567,53 +632,51 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   input: {
-
-    borderBottomWidth: 1, 
-    borderColor: "#ccc", 
-    width:"100%"
+    paddingTop: 10,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    width: "100%",
   },
-  inputAddress:{
-width:'100%',
+  inputAddress: {
+    width: "100%",
 
-borderBottomWidth: 1, 
-borderColor: "#ccc", 
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
   },
   backToServiceButton: {
-    backgroundColor: "#FBB92B",
+    backgroundColor: "#3D4147",
     borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
-  
+    width: "50%",
+    alignSelf: "center",
   },
   backToServiceButtonText: {
-    color: "#3D4147",
+    color: "white",
     fontSize: 16,
     textAlign: "center",
-    fontWeight: "bold",
   },
-  backToServiceButtonTexti:{
+  backToServiceButtonTexti: {
     color: "#FBB92B",
     fontSize: 14,
     textAlign: "center",
     fontWeight: "bold",
-    paddingBottom:10
+    paddingBottom: 10,
   },
   inlineInputGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width:"100%",
+    width: "100%",
     marginBottom: 10,
-  
   },
   inputGroup: {
     marginBottom: 10,
-    width:"40%",
-    // paddingTop:20
+    width: "40%",
+    paddingTop: 15,
   },
   inputGroupAddress: {
     // marginBottom: 10,
-    width:"100%",
-
+    width: "100%",
   },
   inputLabel: {
     fontSize: 14,
@@ -628,6 +691,13 @@ borderColor: "#ccc",
   errorInput: {
     borderColor: "red",
     // borderWidth: 1,
+  },
+  calendarBox: {
+    backgroundColor: "#FFFFFF", // Calendar box background color
+    borderRadius: 8,
+    padding: 15,
+    marginTop: 10,
+    // Other calendar box styles...
   },
 });
 
