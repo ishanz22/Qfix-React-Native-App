@@ -33,6 +33,7 @@ import PlumbingSupply from "../components/services/Plumbing/PlumbingSupply";
 import BookingScreen from "../views/services/booking/BookingScreen";
 import LoginScreen from "../views/LoginScreen";
 import SignUpScreen from "../views/SignUpScreen";
+import SuccessScreen from "../views/payment/SuccessScreen";
 const Stack = createStackNavigator();
 
 const hide = { headerShown: true };
@@ -202,6 +203,7 @@ const Router = () => {
       <Stack.Screen name="home" component={HomeScreen} options={hide} />
       <Stack.Screen name="contract" component={ContractScreen} options={hide} />
       <Stack.Screen name="support" component={SupportScreen} options={hide} />
+      <Stack.Screen name="success" component={SuccessScreen} options={hideHeader} />
       <Stack.Screen
   name="acservice"
   component={ACService}
@@ -411,6 +413,7 @@ const Router = () => {
           header: CheckoutHeader,
         }}
       />
+      
     </Stack.Navigator>
   );
 };

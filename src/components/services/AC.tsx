@@ -8,15 +8,18 @@ import {
   Modal,
   TextInput,
   ScrollView,
+  Image
 } from "react-native";
 
 import { Formik } from "formik";
 
 import { Calendar } from "react-native-calendars";
+import { useNavigation } from "@react-navigation/native";
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
 
 const AC = () => {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedService, setSelectedService] = useState("");
   const [totalCost, setTotalCost] = useState(0);
@@ -132,6 +135,7 @@ const AC = () => {
 
   return (
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+
       <View style={styles.container}>
         <View style={styles.header}></View>
 
@@ -780,7 +784,7 @@ const AC = () => {
                 styles.continueButton,
                 // Add any additional conditions for disabling the button if needed
               ]}
-         
+              onPress={() =>  navigation.navigate("success")}
             >
               <Text style={styles.continueButtonText}>Pay</Text>
             </TouchableOpacity>
@@ -796,7 +800,10 @@ const AC = () => {
               <Text style={styles.continueButtonText}>Continue</Text>
             </TouchableOpacity>
           )}
+
+
         </View>
+    
         <View style={styles.bottom} />
       </View>
     </ScrollView>
@@ -1060,7 +1067,37 @@ const styles = StyleSheet.create({
   },
   bottom:{
     height:20
-  }
+  },
+  successBox: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  successImage: {
+    width: 80,
+    height: 80,
+  },
+  successText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+    color:'white'
+  },
+  thanksMessage: {
+    fontSize: 16,
+    marginVertical: 10,
+    textAlign:'center',
+    color:'white'
+  },
+  goToHomeButton: {
+    backgroundColor: '#007bff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  goToHomeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
 export default AC;
