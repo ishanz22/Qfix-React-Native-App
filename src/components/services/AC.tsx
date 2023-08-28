@@ -38,6 +38,8 @@ const AC = () => {
     landmark: "",
   });
 
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+
   const handleServiceClick = (service, cost) => {
     setSelectedService(service);
     setTotalCost(cost);
@@ -103,7 +105,7 @@ const AC = () => {
   };
 
   const handleTimeSlotSelection = (selectedTime) => {
-    // Perform the necessary actions when a time slot is selected
+    setSelectedTimeSlot(selectedTime); // Set the selected time slot
     console.log(`Selected time: ${selectedTime}`);
   };
   
@@ -120,7 +122,8 @@ const AC = () => {
          <Calendar 
            onDayPress={onDayPress}
            markedDates={markedDates}
-           minDate={new Date()}
+           minDate={new Date().toISOString()} // Convert to ISO string
+
     
          />
          <TouchableOpacity
@@ -136,75 +139,124 @@ const AC = () => {
          
          <View style={styles.timeSlotsGrid}>
            <TouchableOpacity
-             style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("9:00 AM")}
+               style={[
+                styles.timeSlotButton,
+                selectedTimeSlot === "9:00 am" ? styles.selectedButton : null,
+                !selectedDate ? styles.disabledTimeSlotButton : null,
+              ]}
+             onPress={() => handleTimeSlotSelection("9:00 am")}
+             disabled={!selectedDate} 
            >
-             <Text style={styles.timeSlotButtonText}>9:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>9:00 am</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("10:00 AM")}
+             style={[
+              styles.timeSlotButton,
+              selectedTimeSlot === "10:00 am" ? styles.selectedButton : null,
+              !selectedDate ? styles.disabledTimeSlotButton : null,
+            ]}
+             onPress={() => handleTimeSlotSelection("10:00 am")}
            >
-             <Text style={styles.timeSlotButtonText}>10:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>10:00 am</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("11:00 AM")}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "11:00 am" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
+             onPress={() => handleTimeSlotSelection("11:00 am")}
            >
-             <Text style={styles.timeSlotButtonText}>11:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>11:00 am</Text>
            </TouchableOpacity>
 
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "12:00 am" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("12:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>12:00 pm</Text>
            </TouchableOpacity>
 
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "1:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("1:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>1:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+               style={[
+                styles.timeSlotButton,
+                selectedTimeSlot === "2:00 pm" ? styles.selectedButton : null,
+                !selectedDate ? styles.disabledTimeSlotButton : null,
+              ]}
              onPress={() => handleTimeSlotSelection("2:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>2:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "3:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("3:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>3:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "4:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("4:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>4:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "5:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("5:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>5:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "6:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("6:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>6:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "7:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("7:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>7:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
-             style={styles.timeSlotButton}
+                 style={[
+                  styles.timeSlotButton,
+                  selectedTimeSlot === "8:00 pm" ? styles.selectedButton : null,
+                  !selectedDate ? styles.disabledTimeSlotButton : null,
+                ]}
              onPress={() => handleTimeSlotSelection("8:00 pm")}
            >
              <Text style={styles.timeSlotButtonText}>8:00 pm</Text>
@@ -558,6 +610,69 @@ const AC = () => {
                 </View>
               )}
 
+
+
+
+
+{selectedDate && (
+                <View
+                  style={{
+                    paddingTop: 5,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    width: "80%",
+                  }}
+                >
+                    <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                    }}
+                  >
+                    Date:{" "}
+                  </Text>
+                
+                  <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                      fontWeight: "bold",
+                    }}
+                  >
+                 {selectedDate}
+                  </Text>
+                </View>
+              )}
+{selectedTimeSlot && (
+                <View
+                  style={{
+                    paddingTop: 5,
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    width: "80%",
+                  }}
+                >
+                    <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                    }}
+                  >
+                    Time:{" "}
+                  </Text>
+                
+                  <Text
+                    style={{
+                      ...styles.bookingDetailsTextItem,
+                      textAlign: "left",
+                      fontWeight: "bold",
+                    }}
+                  >
+                 {selectedTimeSlot}
+                  </Text>
+                </View>
+              )}
+
               <View style={styles.separator}></View>
             </View>
           ) : null}
@@ -849,6 +964,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
   },
+  disabledTimeSlotButton: {
+    backgroundColor: "#b3d7ff", // Different background color for disabled buttons
+    opacity: 0.7,
+  },
+
 });
 
 export default AC;
