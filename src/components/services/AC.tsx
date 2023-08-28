@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -28,7 +28,7 @@ const AC = () => {
   const [addressValue, setAddressValue] = useState(""); // Add this line
   const [isAddressAdded, setIsAddressAdded] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
 
   const [inputValues, setInputValues] = useState({
     address: "",
@@ -38,7 +38,10 @@ const AC = () => {
     landmark: "",
   });
 
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const scrollViewRef = useRef(null);
+
+  const [showBookingDetails, setShowBookingDetails] = useState(false); // New state
 
   const handleServiceClick = (service, cost) => {
     setSelectedService(service);
@@ -78,9 +81,9 @@ const AC = () => {
     // Toggle the showCalendar state
   };
 
-  const handleBackButtonClick = () => {
-    setShowAdditionalInfo(true); // Show the additional info section
-    setShowCalendar(false); // Hide the calendar
+  const handleBackButtonClicsk = () => {
+    setShowAdditionalInfo(false); // Show the additional info section
+    setShowCalendar(true); // Hide the calendar
   };
 
   const onDayPress = (day) => {
@@ -89,368 +92,432 @@ const AC = () => {
 
     if (selectedDateTime >= currentDate) {
       setSelectedDate(day.dateString);
-      console.log('Selected date:', day.dateString);
+      console.log("Selected date:", day.dateString);
     }
   };
-  
 
   const markedDates = {
-    [selectedDate]: { selected: true, disableTouchEvent: true,
+    [selectedDate]: {
+      selected: true,
+      disableTouchEvent: true,
       selectedColor: "#007bff",
       selectedTextColor: "white",
-    
     },
-      
-      
   };
 
   const handleTimeSlotSelection = (selectedTime) => {
     setSelectedTimeSlot(selectedTime); // Set the selected time slot
     console.log(`Selected time: ${selectedTime}`);
+    scrollViewRef.current.scrollToEnd({ animated: true });
   };
-  
+  const [showServiceButtons, setShowServiceButtons] = useState(true);
+  const handleConfirmButtonClick = () => {
+    setShowCalendar(false);
+    setShowAdditionalInfo(false);
+    setShowServiceButtons(false);
+    setShowBookingDetails(true);
+  };
 
+  const handleBackButtonClick = () => {
+    setShowServiceButtons(true); // Show the AC service buttons again
+    setShowBookingDetails(false); // Hide the booking details
+    setShowCalendar(true); // Show the calendar
+  };
+
+  const handleShowPreviousSections = () => {
+    setShowServiceButtons(true);
+    setShowBookingDetails(false);
+    setShowCalendar(true);
+  };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View style={styles.header}></View>
 
         {showCalendar ? (
-       <View style={styles.calendarBox}>
-       <View>
-         <Calendar 
-           onDayPress={onDayPress}
-           markedDates={markedDates}
-           minDate={new Date().toISOString()} // Convert to ISO string
+          <View style={styles.calendarBox}>
+            <View>
+              <Calendar
+                onDayPress={onDayPress}
+                markedDates={markedDates}
+                minDate={new Date().toISOString()} // Convert to ISO string
+              />
+              <TouchableOpacity onPress={handleBackButtonClick}>
+                <Text>Back</Text>
+              </TouchableOpacity>
+            </View>
 
-    
-         />
-         <TouchableOpacity
-           onPress={handleBackButtonClick}
-         >
-           <Text>Back</Text>
-         </TouchableOpacity>
-       </View>
-       
-       <View style={styles.timeSlotsContainer}>
-         <View style={styles.separatorTime} />
-         <Text style={styles.headerTextTime}>What time should the service start?</Text>
-         
-         <View style={styles.timeSlotsGrid}>
-           <TouchableOpacity
-               style={[
-                styles.timeSlotButton,
-                selectedTimeSlot === "9:00 am" ? styles.selectedButton : null,
-                !selectedDate ? styles.disabledTimeSlotButton : null,
-              ]}
-             onPress={() => handleTimeSlotSelection("9:00 am")}
-             disabled={!selectedDate} 
-           >
-             <Text style={styles.timeSlotButtonText}>9:00 am</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-             style={[
-              styles.timeSlotButton,
-              selectedTimeSlot === "10:00 am" ? styles.selectedButton : null,
-              !selectedDate ? styles.disabledTimeSlotButton : null,
-            ]}
-             onPress={() => handleTimeSlotSelection("10:00 am")}
-           >
-             <Text style={styles.timeSlotButtonText}>10:00 am</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "11:00 am" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("11:00 am")}
-           >
-             <Text style={styles.timeSlotButtonText}>11:00 am</Text>
-           </TouchableOpacity>
+            <View style={styles.timeSlotsContainer}>
+              <View style={styles.separatorTime} />
+              <Text style={styles.headerTextTime}>
+                What time should the service start?
+              </Text>
 
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "12:00 am" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("12:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>12:00 pm</Text>
-           </TouchableOpacity>
+              <View style={styles.timeSlotsGrid}>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "9:00 am"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("9:00 am")}
+                  disabled={!selectedDate}
+                >
+                  <Text style={styles.timeSlotButtonText}>9:00 am</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "10:00 am"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("10:00 am")}
+                >
+                  <Text style={styles.timeSlotButtonText}>10:00 am</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "11:00 am"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("11:00 am")}
+                >
+                  <Text style={styles.timeSlotButtonText}>11:00 am</Text>
+                </TouchableOpacity>
 
-           <TouchableOpacity
-                style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "1:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("1:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>1:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-               style={[
-                styles.timeSlotButton,
-                selectedTimeSlot === "2:00 pm" ? styles.selectedButton : null,
-                !selectedDate ? styles.disabledTimeSlotButton : null,
-              ]}
-             onPress={() => handleTimeSlotSelection("2:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>2:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "3:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("3:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>3:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "4:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("4:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>4:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "5:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("5:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>5:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "6:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("6:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>6:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "7:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("7:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>7:00 pm</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-                 style={[
-                  styles.timeSlotButton,
-                  selectedTimeSlot === "8:00 pm" ? styles.selectedButton : null,
-                  !selectedDate ? styles.disabledTimeSlotButton : null,
-                ]}
-             onPress={() => handleTimeSlotSelection("8:00 pm")}
-           >
-             <Text style={styles.timeSlotButtonText}>8:00 pm</Text>
-           </TouchableOpacity>
-           {/* ... and so on for the rest of the time slots */}
-         </View>
-       </View>
-     </View>
-     
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "12:00 am"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("12:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>12:00 pm</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "1:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("1:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>1:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "2:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("2:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>2:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "3:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("3:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>3:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "4:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("4:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>4:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "5:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("5:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>5:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "6:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("6:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>6:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "7:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("7:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>7:00 pm</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.timeSlotButton,
+                    selectedTimeSlot === "8:00 pm"
+                      ? styles.selectedButton
+                      : null,
+                    !selectedDate ? styles.disabledTimeSlotButton : null,
+                  ]}
+                  onPress={() => handleTimeSlotSelection("8:00 pm")}
+                >
+                  <Text style={styles.timeSlotButtonText}>8:00 pm</Text>
+                </TouchableOpacity>
+                {/* ... and so on for the rest of the time slots */}
+              </View>
+            </View>
+          </View>
         ) : !showAdditionalInfo ? (
-          <View style={styles.buttonContainer}>
-            <Text style={styles.headerText}>AC SERVICES TYPE & QUANTITY</Text>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("AC Repair", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "AC Repair"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>AC{"\n"}Repair</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => handleServiceClick("AC Soft Cleaning", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "AC Soft Cleaning"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>AC Soft{"\n"}Cleaning</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("AC Duct Cleaning", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "AC Duct Cleaning"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>AC Duct{"\n"}Cleaning</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("AC Deep Cleaning", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "AC Deep Cleaning"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>AC Deep{"\n"}Cleaning</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("AC Maintenance", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "AC Maintenance"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>AC{"\n"}Maintenance</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("Smart Installation", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "Smart Installation"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>Smart{"\n"}Installation</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={() => handleServiceClick("Standard Installation", 250)}
-                style={[
-                  styles.button,
-                  { width: buttonWidth },
-                  isQuantitySet && selectedService === "Standard Installation"
-                    ? styles.selectedButton
-                    : null,
-                ]}
-              >
-                <Text style={styles.buttonText}>
-                  Standard{"\n"}Installation
+          <View>
+            {showServiceButtons && (
+              <View style={styles.buttonContainer}>
+                <Text style={styles.headerText}>
+                  AC SERVICES TYPE & QUANTITY
                 </Text>
-              </TouchableOpacity>
-            </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={handleCloseModal}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      textAlign: "center",
-                      paddingBottom: 10,
-                    }}
-                  >
-                    Select Your Quantity
-                  </Text>
 
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      textAlign: "center",
-                      paddingBottom: 10,
-                      color: "#DAA520",
-                    }}
+                <View style={styles.buttonRow}>
+                  <TouchableOpacity
+                    onPress={() => handleServiceClick("AC Repair", 250)}
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "AC Repair"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
                   >
-                    ( 1 {selectedService} : 250AED )
-                  </Text>
+                    <Text style={styles.buttonText}>AC{"\n"}Repair</Text>
+                  </TouchableOpacity>
 
-                  {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
+                  <TouchableOpacity
+                    onPress={() => handleServiceClick("AC Soft Cleaning", 250)}
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "AC Soft Cleaning"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>AC Soft{"\n"}Cleaning</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleServiceClick("AC Duct Cleaning", 250)}
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "AC Duct Cleaning"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>AC Duct{"\n"}Cleaning</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.buttonRow}>
+                  <TouchableOpacity
+                    onPress={() => handleServiceClick("AC Deep Cleaning", 250)}
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "AC Deep Cleaning"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>AC Deep{"\n"}Cleaning</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleServiceClick("AC Maintenance", 250)}
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "AC Maintenance"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>AC{"\n"}Maintenance</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleServiceClick("Smart Installation", 250)
+                    }
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet && selectedService === "Smart Installation"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>
+                      Smart{"\n"}Installation
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.buttonRow}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleServiceClick("Standard Installation", 250)
+                    }
+                    style={[
+                      styles.button,
+                      { width: buttonWidth },
+                      isQuantitySet &&
+                      selectedService === "Standard Installation"
+                        ? styles.selectedButton
+                        : null,
+                    ]}
+                  >
+                    <Text style={styles.buttonText}>
+                      Standard{"\n"}Installation
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={handleCloseModal}
+                >
+                  <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          textAlign: "center",
+                          paddingBottom: 10,
+                        }}
+                      >
+                        Select Your Quantity
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          textAlign: "center",
+                          paddingBottom: 10,
+                          color: "#DAA520",
+                        }}
+                      >
+                        ( 1 {selectedService} : 250AED )
+                      </Text>
+
+                      {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
               Selected Service: 
             </Text> */}
-                  <View style={styles.gridContainer}>
-                    {/* First Row */}
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(1)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>1</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(2)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>2</Text>
-                    </TouchableOpacity>
+                      <View style={styles.gridContainer}>
+                        {/* First Row */}
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(1)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(2)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>2</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(3)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>3</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(4)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>4</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(5)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>5</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(3)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>3</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(4)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>4</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(5)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>5</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(6)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>6</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(7)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>7</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => handleModalButtonClick(8)}
-                      style={styles.modalButton}
-                    >
-                      <Text style={styles.modalButtonText}>8</Text>
-                    </TouchableOpacity>
-                    {/* Add more rows as needed */}
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(6)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>6</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(7)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>7</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => handleModalButtonClick(8)}
+                          style={styles.modalButton}
+                        >
+                          <Text style={styles.modalButtonText}>8</Text>
+                        </TouchableOpacity>
+                        {/* Add more rows as needed */}
+                      </View>
+                    </View>
                   </View>
-                </View>
+                </Modal>
               </View>
-            </Modal>
+            )}
+
+{/* Back Button */}
+            {/* {showBookingDetails && (
+              <View style={styles.buttonRow}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={handleBackButtonClicsk}
+                >
+                  <Text style={styles.backButtonText}>Back</Text>
+                </TouchableOpacity>
+              </View>
+            )} */}
           </View>
         ) : (
           <Formik
@@ -557,6 +624,7 @@ const AC = () => {
                       } else {
                         console.log("Required fields are not filled ❌"); // Log a message for empty required fields
                       }
+                      scrollViewRef.current.scrollToEnd({ animated: true });
                     }}
                   >
                     <Text style={styles.backToServiceButtonText}>
@@ -569,8 +637,9 @@ const AC = () => {
             )}
           </Formik>
         )}
-        {/*  */}
+
         {/* Booking Details Box */}
+
         <View style={styles.bookingDetailsBox}>
           <Text style={styles.bookingDetailsHeading}>BOOKING DETAILS</Text>
 
@@ -594,6 +663,7 @@ const AC = () => {
                     style={{
                       ...styles.bookingDetailsTextItem,
                       textAlign: "left",
+                      width: "30%",
                     }}
                   >
                     Address:{" "}
@@ -610,11 +680,7 @@ const AC = () => {
                 </View>
               )}
 
-
-
-
-
-{selectedDate && (
+              {selectedDate && (
                 <View
                   style={{
                     paddingTop: 5,
@@ -623,15 +689,16 @@ const AC = () => {
                     width: "80%",
                   }}
                 >
-                    <Text
+                  <Text
                     style={{
                       ...styles.bookingDetailsTextItem,
                       textAlign: "left",
+                      width: "30%",
                     }}
                   >
                     Date:{" "}
                   </Text>
-                
+
                   <Text
                     style={{
                       ...styles.bookingDetailsTextItem,
@@ -639,11 +706,11 @@ const AC = () => {
                       fontWeight: "bold",
                     }}
                   >
-                 {selectedDate}
+                    {selectedDate}
                   </Text>
                 </View>
               )}
-{selectedTimeSlot && (
+              {selectedTimeSlot && (
                 <View
                   style={{
                     paddingTop: 5,
@@ -652,15 +719,16 @@ const AC = () => {
                     width: "80%",
                   }}
                 >
-                    <Text
+                  <Text
                     style={{
                       ...styles.bookingDetailsTextItem,
                       textAlign: "left",
+                      width: "30%",
                     }}
                   >
                     Time:{" "}
                   </Text>
-                
+
                   <Text
                     style={{
                       ...styles.bookingDetailsTextItem,
@@ -668,7 +736,7 @@ const AC = () => {
                       fontWeight: "bold",
                     }}
                   >
-                 {selectedTimeSlot}
+                    {selectedTimeSlot}
                   </Text>
                 </View>
               )}
@@ -689,11 +757,34 @@ const AC = () => {
                 !addressValue && styles.disabledButton,
               ]}
               disabled={!addressValue}
-              onPress={handleContinue1ButtonClick}
+              onPress={() => {
+                handleContinue1ButtonClick();
+                scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
+              }}
             >
               <Text style={styles.continueButtonText}>Continue1</Text>
             </TouchableOpacity>
-          ) : (
+          ) : showCalendar ? (
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                // Add any additional conditions for disabling the button if needed
+              ]}
+              onPress={handleConfirmButtonClick}
+            >
+              <Text style={styles.continueButtonText}>Confirm</Text>
+            </TouchableOpacity>
+          ) : showBookingDetails ? (
+            <TouchableOpacity
+              style={[
+                styles.continueButton,
+                // Add any additional conditions for disabling the button if needed
+              ]}
+         
+            >
+              <Text style={styles.continueButtonText}>Pay</Text>
+            </TouchableOpacity>
+          ): (
             <TouchableOpacity
               style={[
                 styles.continueButton,
@@ -706,6 +797,7 @@ const AC = () => {
             </TouchableOpacity>
           )}
         </View>
+        <View style={styles.bottom} />
       </View>
     </ScrollView>
   );
@@ -741,7 +833,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   button: {
-    backgroundColor:"#007bff",
+    backgroundColor: "#007bff",
     borderRadius: 8,
     paddingVertical: 9,
     marginHorizontal: 5,
@@ -825,7 +917,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: 10,
-
   },
   modalButton: {
     backgroundColor: "#3D4147",
@@ -932,43 +1023,44 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // Other calendar box styles...
   },
-  headerTextTime:{
+  headerTextTime: {
     fontSize: 17,
     // fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
   },
-  separatorTime:{
+  separatorTime: {
     height: 1,
-    backgroundColor: '#E0E0E0', // Light gray color
+    backgroundColor: "#E0E0E0", // Light gray color
     marginBottom: 10,
-    
   },
   timeSlotsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   timeSlotButton: {
-    width: '30%', // Adjust width to fit three buttons in a row
+    width: "30%", // Adjust width to fit three buttons in a row
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#E0E0E0', // Light gray color
+    borderColor: "#E0E0E0", // Light gray color
     backgroundColor: "#007bff",
     borderRadius: 10,
-    marginHorizontal: '1.5%', // Add margin horizontally between buttons
+    marginHorizontal: "1.5%", // Add margin horizontally between buttons
     marginBottom: 10, // Add margin at the bottom of the button
   },
 
   timeSlotButtonText: {
     fontSize: 14,
-    color: 'white',
+    color: "white",
   },
   disabledTimeSlotButton: {
     backgroundColor: "#b3d7ff", // Different background color for disabled buttons
     opacity: 0.7,
   },
-
+  bottom:{
+    height:20
+  }
 });
 
 export default AC;
