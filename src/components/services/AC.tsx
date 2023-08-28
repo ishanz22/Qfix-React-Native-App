@@ -90,9 +90,16 @@ const AC = () => {
       console.log('Selected date:', day.dateString);
     }
   };
+  
 
   const markedDates = {
-    [selectedDate]: { selected: true, marked: true },
+    [selectedDate]: { selected: true, disableTouchEvent: true,
+      selectedColor: "#007bff",
+      selectedTextColor: "white",
+    
+    },
+      
+      
   };
 
   const handleTimeSlotSelection = (selectedTime) => {
@@ -114,6 +121,7 @@ const AC = () => {
            onDayPress={onDayPress}
            markedDates={markedDates}
            minDate={new Date()}
+    
          />
          <TouchableOpacity
            onPress={handleBackButtonClick}
@@ -129,77 +137,77 @@ const AC = () => {
          <View style={styles.timeSlotsGrid}>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
-           >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
-           </TouchableOpacity>
-           <TouchableOpacity
-             style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection(1)}
+             onPress={() => handleTimeSlotSelection("9:00 AM")}
            >
              <Text style={styles.timeSlotButtonText}>9:00 AM</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection(2)}
+             onPress={() => handleTimeSlotSelection("10:00 AM")}
            >
              <Text style={styles.timeSlotButtonText}>10:00 AM</Text>
            </TouchableOpacity>
-
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("11:00 AM")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>11:00 AM</Text>
            </TouchableOpacity>
 
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("12:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>12:00 pm</Text>
+           </TouchableOpacity>
+
+           <TouchableOpacity
+             style={styles.timeSlotButton}
+             onPress={() => handleTimeSlotSelection("1:00 pm")}
+           >
+             <Text style={styles.timeSlotButtonText}>1:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("2:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>2:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("3:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>3:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("4:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>4:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("5:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>5:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("6:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>6:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("7:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>7:00 pm</Text>
            </TouchableOpacity>
            <TouchableOpacity
              style={styles.timeSlotButton}
-             onPress={() => handleTimeSlotSelection("8:00 AM")}
+             onPress={() => handleTimeSlotSelection("8:00 pm")}
            >
-             <Text style={styles.timeSlotButtonText}>8:00 AM</Text>
+             <Text style={styles.timeSlotButtonText}>8:00 pm</Text>
            </TouchableOpacity>
            {/* ... and so on for the rest of the time slots */}
          </View>
@@ -618,7 +626,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor:"#007bff",
     borderRadius: 8,
     paddingVertical: 9,
     marginHorizontal: 5,
@@ -702,6 +710,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: 10,
+
   },
   modalButton: {
     backgroundColor: "#3D4147",
@@ -824,18 +833,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-
   timeSlotButton: {
-    width: '33.33%', // 3 buttons in a row
+    width: '30%', // Adjust width to fit three buttons in a row
     paddingVertical: 10,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E0E0E0', // Light gray color
+    backgroundColor: "#007bff",
+    borderRadius: 10,
+    marginHorizontal: '1.5%', // Add margin horizontally between buttons
+    marginBottom: 10, // Add margin at the bottom of the button
   },
 
   timeSlotButtonText: {
-    fontSize: 16,
-    color: '#333333',
+    fontSize: 14,
+    color: 'white',
   },
 });
 
