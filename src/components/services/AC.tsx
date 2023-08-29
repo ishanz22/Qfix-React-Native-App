@@ -8,13 +8,17 @@ import {
   Modal,
   TextInput,
   ScrollView,
-  Image
+  Image,
 } from "react-native";
 
 import { Formik } from "formik";
 
 import { Calendar } from "react-native-calendars";
 import { useNavigation } from "@react-navigation/native";
+import { collection, doc, setDoc,addDoc } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../../../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword, AuthCredential,onAuthStateChanged } from "firebase/auth";
+
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
 
@@ -32,6 +36,7 @@ const AC = () => {
   const [isAddressAdded, setIsAddressAdded] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
+  const auth = getAuth();
 
   const [inputValues, setInputValues] = useState({
     address: "",
@@ -87,6 +92,7 @@ const AC = () => {
   const handleBackButtonClicsk = () => {
     setShowAdditionalInfo(false); // Show the additional info section
     setShowCalendar(true); // Hide the calendar
+
   };
 
   const onDayPress = (day) => {
@@ -122,9 +128,10 @@ const AC = () => {
   };
 
   const handleBackButtonClick = () => {
-    setShowServiceButtons(true); // Show the AC service buttons again
-    setShowBookingDetails(false); // Hide the booking details
-    setShowCalendar(true); // Show the calendar
+    setShowServiceButtons(false); // Show the AC service buttons again
+    setShowBookingDetails(true); // Hide the booking details
+    setShowCalendar(false); // Show the calendar
+    setShowAdditionalInfo(true);
   };
 
   const handleShowPreviousSections = () => {
@@ -133,10 +140,109 @@ const AC = () => {
     setShowCalendar(true);
   };
 
+  const payFunction = async () => {
+    if (inputValues && selectedDate && selectedTimeSlot) {
+      const paymentInfo = {
+        formData: inputValues,
+        selectedDate: selectedDate,
+        selectedTime: selectedTimeSlot,
+      };
+  
+      // Get the current user's UID
+      const user = auth.currentUser;
+
+      
+      if (user) {
+        try {
+          const uid = user.uid;
+  
+          // Save paymentInfo to Firestore under the user's UID
+          await addDoc(collection(FIRESTORE_DB, 'users', uid, 'payments'), paymentInfo,);
+  
+          console.log("Payment data saved to Firestore successfully!");
+  
+          // Place your payment logic here
+  
+          navigation.navigate("success");
+        
+          
+        } catch (error) {
+          console.error("Error saving payment data:", error);
+        }
+      } else {
+        console.log("User not authenticated.");
+      }
+    } else {
+      console.log("Please fill in all required fields.");
+    }
+  };
   return (
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-
       <View style={styles.container}>
+        <View style={styles.containerTracker}>
+          <Text
+            style={[
+              styles.headerTracker,
+              (!isServiceSelected || isQuantitySet || showAdditionalInfo) &&
+                styles.yellowText,
+            ]}
+          >
+            Service
+          </Text>
+
+          <TouchableOpacity
+            onPress={handleBackButtonClick}
+            disabled={!selectedService || !selectedQuantity}
+          >
+            <Text
+              style={[
+                styles.headerTracker,
+                (showCalendar || showAdditionalInfo || showBookingDetails) &&
+                  styles.yellowText,
+              ]}
+            >
+              Location
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleBackButtonClicsk}
+            disabled={
+              !selectedService ||
+              !selectedQuantity ||
+              !selectedDate ||
+              !selectedTimeSlot
+            }
+          >
+            <Text
+              style={[
+                styles.headerTracker,
+                (showCalendar || showBookingDetails) && styles.yellowText,
+              ]}
+            >
+              Datetime
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleConfirmButtonClick}
+            disabled={
+              !selectedService ||
+              !selectedQuantity ||
+              !selectedDate ||
+              !selectedTimeSlot
+            }
+          >
+            <Text
+              style={[
+                styles.headerTracker,
+                showBookingDetails && styles.yellowText,
+              ]}
+            >
+              Payment
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.header}></View>
 
         {showCalendar ? (
@@ -511,7 +617,7 @@ const AC = () => {
               </View>
             )}
 
-{/* Back Button */}
+            {/* Back Button */}
             {/* {showBookingDetails && (
               <View style={styles.buttonRow}>
                 <TouchableOpacity
@@ -601,14 +707,14 @@ const AC = () => {
                   </View>
                   {/* ...Other form fields... */}
 
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     // style={styles.backToServiceButton}
                     onPress={() => setShowAdditionalInfo(false)}
                   >
                     <Text style={styles.backToServiceButtonTexti}>
                       Back to Service
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
 
                   <TouchableOpacity
                     style={styles.backToServiceButton}
@@ -766,15 +872,16 @@ const AC = () => {
                 scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
               }}
             >
-              <Text style={styles.continueButtonText}>Continue1</Text>
+              <Text style={styles.continueButtonText}>Continue</Text>
             </TouchableOpacity>
           ) : showCalendar ? (
             <TouchableOpacity
               style={[
                 styles.continueButton,
-                // Add any additional conditions for disabling the button if needed
+                (!selectedTimeSlot || !selectedDate) && styles.disabledButton,
               ]}
               onPress={handleConfirmButtonClick}
+              disabled={!selectedTimeSlot || !selectedDate}
             >
               <Text style={styles.continueButtonText}>Confirm</Text>
             </TouchableOpacity>
@@ -784,11 +891,11 @@ const AC = () => {
                 styles.continueButton,
                 // Add any additional conditions for disabling the button if needed
               ]}
-              onPress={() =>  navigation.navigate("success")}
+              onPress={payFunction}
             >
               <Text style={styles.continueButtonText}>Pay</Text>
             </TouchableOpacity>
-          ): (
+          ) : (
             <TouchableOpacity
               style={[
                 styles.continueButton,
@@ -800,10 +907,8 @@ const AC = () => {
               <Text style={styles.continueButtonText}>Continue</Text>
             </TouchableOpacity>
           )}
-
-
         </View>
-    
+
         <View style={styles.bottom} />
       </View>
     </ScrollView>
@@ -1065,12 +1170,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#b3d7ff", // Different background color for disabled buttons
     opacity: 0.7,
   },
-  bottom:{
-    height:20
+  bottom: {
+    height: 20,
   },
   successBox: {
     marginTop: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   successImage: {
     width: 80,
@@ -1078,25 +1183,40 @@ const styles = StyleSheet.create({
   },
   successText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
-    color:'white'
+    color: "white",
   },
   thanksMessage: {
     fontSize: 16,
     marginVertical: 10,
-    textAlign:'center',
-    color:'white'
+    textAlign: "center",
+    color: "white",
   },
   goToHomeButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
   },
   goToHomeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
+  },
+  containerTracker: {
+    paddingTop:10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+  
+    alignItems: "center",
+  },
+  headerTracker: {
+    fontSize: 16,
+    color: "white",
+  },
+  yellowText: {
+    color: "yellow",
   },
 });
 
