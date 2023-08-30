@@ -15,9 +15,14 @@ import { Formik } from "formik";
 
 import { Calendar } from "react-native-calendars";
 import { useNavigation } from "@react-navigation/native";
-import { collection, doc, setDoc,addDoc } from 'firebase/firestore';
-import { FIRESTORE_DB } from '../../../firebaseConfig';
-import { getAuth, signInWithEmailAndPassword, AuthCredential,onAuthStateChanged } from "firebase/auth";
+import { collection, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../../firebaseConfig";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  AuthCredential,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
@@ -92,7 +97,6 @@ const AC = () => {
   const handleBackButtonClicsk = () => {
     setShowAdditionalInfo(false); // Show the additional info section
     setShowCalendar(true); // Hide the calendar
-
   };
 
   const onDayPress = (day) => {
@@ -141,31 +145,52 @@ const AC = () => {
   };
 
   const payFunction = async () => {
-    if (inputValues && selectedDate && selectedTimeSlot) {
-      const paymentInfo = {
-        formData: inputValues,
-        selectedDate: selectedDate,
-        selectedTime: selectedTimeSlot,
-      };
-  
+    if (inputValues && selectedDate && selectedTimeSlot && totalCost) {
       // Get the current user's UID
       const user = auth.currentUser;
-
-      
+  
       if (user) {
         try {
-          const uid = user.uid;
-  
-          // Save paymentInfo to Firestore under the user's UID
-          await addDoc(collection(FIRESTORE_DB, 'users', uid, 'payments'), paymentInfo,);
-  
-          console.log("Payment data saved to Firestore successfully!");
-  
-          // Place your payment logic here
-  
-          navigation.navigate("success");
-        
+          const userId = user.uid;
           
+  
+          // Retrieve the user's document from Firestore
+          const userDocRef = doc(FIRESTORE_DB, "users", userId);
+          const userDocSnapshot = await getDoc(userDocRef);
+  
+          if (userDocSnapshot.exists()) {
+            const userData = userDocSnapshot.data();
+            const userName = userData.username;
+            const mobileNumber = userData.mobileNumber;
+  
+            // Define paymentInfo object with user details included
+            const paymentInfo = {
+              formData: inputValues,
+              selectedDate: selectedDate,
+              selectedTime: selectedTimeSlot,
+              totalCost: totalCost,
+              userName: userName,
+              mobileNumber: mobileNumber,
+              email: user.email,
+            };
+  
+            // Save paymentInfo to a subcollection under the user's UID
+            await addDoc(collection(FIRESTORE_DB, "users", userId, "payments"), paymentInfo);
+  
+            // Display user data and other information in the console
+            console.log("Payment data saved to Firestore successfully!");
+            console.log(
+              "Username:", userName,
+              "\nMobile Number:", mobileNumber,
+              "\nUser UID:", userId,
+              "\nUser Email:", user.email
+            );
+  
+            // Place your payment logic here
+            navigation.replace("success");
+          } else {
+            console.log("User document does not exist.");
+          }
         } catch (error) {
           console.error("Error saving payment data:", error);
         }
@@ -176,6 +201,12 @@ const AC = () => {
       console.log("Please fill in all required fields.");
     }
   };
+  
+  
+  
+  
+  
+
   return (
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -1204,11 +1235,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   containerTracker: {
-    paddingTop:10,
+    paddingTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-  
+
     alignItems: "center",
   },
   headerTracker: {
