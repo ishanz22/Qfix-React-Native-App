@@ -34,20 +34,6 @@ const BookingScreen = () => {
     // Add more dummy data here if you want to test with multiple cards
   ];
 
-  const handleSignOut = () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful
-        
-        console.log("User signed out successfully.");
-        navigation.replace("login");
-      })
-      .catch((error) => {
-        // An error occurred
-        console.error("Error signing out:", error);
-      });
-  };
 
   return (
     <View style={{backgroundColor:'#3D4147'}}>
@@ -56,9 +42,7 @@ const BookingScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>Bookings</Text>
-        <TouchableOpacity onPress={handleSignOut}>
-        <Text>Sign Out</Text>
-      </TouchableOpacity>
+        
       </View>
       {bookings.map((booking, index) => (
         <BookingCard key={index} {...booking} />

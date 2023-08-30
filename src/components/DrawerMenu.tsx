@@ -2,6 +2,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from the appropriate library
 
 import Header from "./Header";
 
@@ -39,6 +40,49 @@ const CustomDrawerContent = (props) => {
   <Text style={styles.signOutButtonText}>Log Out</Text>
 </TouchableOpacity>
       </View>
+<View style={{paddingTop:10}}/>
+
+         {/* Button for Book Now */}
+         <TouchableOpacity  style={styles.buttonContainer}>
+        <Ionicons name="calendar-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>Book Now</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+      {/* Button for Service */}
+      <TouchableOpacity style={styles.buttonContainer}>
+        <Ionicons name="settings-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>Service</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+      {/* Button for My Bookings */}
+      <TouchableOpacity  style={styles.buttonContainer}>
+        <Ionicons name="book-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>My Bookings</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+      <TouchableOpacity  style={styles.buttonContainer}>
+        <Ionicons name="person-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>My Account</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+      <TouchableOpacity  style={styles.buttonContainer}>
+        <Ionicons name="information-circle-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>About Qfixs</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+      <TouchableOpacity  style={styles.buttonContainer}>
+        <Ionicons name="share-outline" size={24} color="#fff" style={styles.icon} />
+        <Text style={styles.text}>Share the App</Text>
+        <Ionicons name="chevron-forward" size={24} color="#fff" style={styles.chevronIcon} />
+      </TouchableOpacity>
+
+
+      
     </DrawerContentScrollView>
   );
 };
@@ -91,16 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 15,
   },
-  icon: {
-    color: "rgba(58, 79, 102, 0.7)",
-  },
-  text: {
-    fontSize: 15,
-    color:'red',
-    width: "70%",
-    textAlign: "left",
-    paddingLeft: 15,
-  },
+
   separator: {
     borderBottomWidth: 1,
     borderBottomColor: "rgba(204, 204, 204, 0.8)",
@@ -130,4 +165,24 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
   },
+  buttonContainer: {
+    backgroundColor: "#35383D",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'white'
+  },
+  icon: {
+    marginRight: 15
+  },
+  text: {
+    color: "#fff",
+    flex: 1
+  },
+  chevronIcon: {
+    marginLeft: 10
+  },
 });
+
