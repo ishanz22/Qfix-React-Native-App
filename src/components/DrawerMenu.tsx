@@ -1,55 +1,52 @@
-import React from "react";
-import { Alert, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from "@react-navigation/drawer";
-import HomeScreen from "../screens/HomeScreen";
 
-import HeaderRight from "./HeaderRight";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+
 import Header from "./Header";
 
 import { useNavigation } from "@react-navigation/native";
-const CustomDrawerContent = (props: any) => {
+
+import { getAuth, signOut } from "firebase/auth"; // Make sure the import path is correct
+// Replace the above import with your Firebase authentication import
+
+const CustomDrawerContent = (props) => {
   const navigation = useNavigation();
 
+  const handleSignOut = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      console.log("User signed out successfully.");
 
+      // Close the drawer immediately after signing out
+      props.navigation.closeDrawer();
+
+      // Reset the navigation stack to only include the "login" screen
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "login" }],
+      });
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
-    <DrawerContentScrollView {...props}>
-      {/* <DrawerItemList {...props}/> */}
-      <View style={{ paddingHorizontal: 16, marginTop: "10%" }}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "bold",
-            paddingTop: 15,
-            color: 'red',
-          }}
-        >
-          Shashika Mahindapala{" "}
-        </Text>
-        <Text style={{ fontSize: 14, color: "#666" }}>Shaskika@gmail.com</Text>
+    <DrawerContentScrollView {...props} style={{ backgroundColor: "#3D4147" }}>
+      <View style={{ paddingHorizontal: 16, alignItems: "flex-end" }}>
+      <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
+  <Text style={styles.signOutButtonText}>Log Out</Text>
+</TouchableOpacity>
       </View>
-
-      <View style={styles.separator} />
-
-      <View style={styles.separator} />
-
-      <View style={styles.separator} />
-
-      <View style={styles.separator} />
     </DrawerContentScrollView>
   );
 };
 
-// @ts-ignore
 const DrawerMenu = ({ component }) => {
   const Drawer = createDrawerNavigator();
-  const renderHeader = (title: string) => {
-    return () => <Header title={title} />; // use the Header component
+  const renderHeader = (title) => {
+    return () => <Header title={title} />;
   };
 
   return (
@@ -57,13 +54,19 @@ const DrawerMenu = ({ component }) => {
       screenOptions={{
         drawerPosition: "right",
         headerShown: false,
+        swipeEnabled: false, 
         headerTitle: renderHeader("Text Based Ticketing"),
- 
+
+        
       }}
+      
       initialRouteName="Home"
       detachInactiveScreens={true}
       defaultStatus={"closed"}
+    
+     
       drawerContent={(props) => <CustomDrawerContent {...props} />}
+      
     >
       <Drawer.Screen
         name="Home"
@@ -75,6 +78,7 @@ const DrawerMenu = ({ component }) => {
 };
 
 export default DrawerMenu;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -113,5 +117,17 @@ const styles = StyleSheet.create({
   },
   logoutIcon: {
     color: "#DC3545",
+  },
+  signOutButton: {
+    borderWidth: 1,
+    borderColor: "white",
+    backgroundColor: "#3D4147",
+    padding: 10,
+    borderRadius: 5,
+  },
+
+  signOutButtonText: {
+    color: "white",
+    textAlign: "center",
   },
 });
