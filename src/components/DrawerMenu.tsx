@@ -155,14 +155,14 @@ const styles = StyleSheet.create({
   },
   signOutButton: {
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "#FBB92B",
     backgroundColor: "#3D4147",
     padding: 10,
     borderRadius: 5,
   },
 
   signOutButtonText: {
-    color: "white",
+    color: "#FBB92B",
     textAlign: "center",
   },
   buttonContainer: {

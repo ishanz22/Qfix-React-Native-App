@@ -44,9 +44,9 @@ const BookingScreen = () => {
         <Text style={styles.headingText}>Bookings</Text>
         
       </View>
-      {bookings.map((booking, index) => (
-        <BookingCard key={index} {...booking} />
-      ))}
+ 
+        <BookingCard  />
+   
     </ScrollView>
     </View>
   );
