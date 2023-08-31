@@ -145,7 +145,7 @@ const AC = () => {
   };
 
   const payFunction = async () => {
-    if (inputValues && selectedDate && selectedTimeSlot && totalCost) {
+    if (selectedService &&inputValues && selectedDate && selectedTimeSlot && totalCost) {
       // Get the current user's UID
       const user = auth.currentUser;
   
@@ -165,9 +165,10 @@ const AC = () => {
   
             // Define paymentInfo object with user details included
             const paymentInfo = {
-              formData: inputValues,
-              selectedDate: selectedDate,
-              selectedTime: selectedTimeSlot,
+              service:selectedService,
+              location: inputValues,
+              Date: selectedDate,
+              Tima: selectedTimeSlot,
               totalCost: totalCost,
               userName: userName,
               mobileNumber: mobileNumber,
@@ -318,6 +319,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("10:00 am")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>10:00 am</Text>
                 </TouchableOpacity>
@@ -330,6 +332,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("11:00 am")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>11:00 am</Text>
                 </TouchableOpacity>
@@ -343,6 +346,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("12:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>12:00 pm</Text>
                 </TouchableOpacity>
@@ -356,6 +360,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("1:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>1:00 pm</Text>
                 </TouchableOpacity>
@@ -368,6 +373,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("2:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>2:00 pm</Text>
                 </TouchableOpacity>
@@ -380,6 +386,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("3:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>3:00 pm</Text>
                 </TouchableOpacity>
@@ -392,6 +399,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("4:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>4:00 pm</Text>
                 </TouchableOpacity>
@@ -404,6 +412,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("5:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>5:00 pm</Text>
                 </TouchableOpacity>
@@ -416,6 +425,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("6:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>6:00 pm</Text>
                 </TouchableOpacity>
@@ -428,6 +438,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("7:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>7:00 pm</Text>
                 </TouchableOpacity>
@@ -440,6 +451,7 @@ const AC = () => {
                     !selectedDate ? styles.disabledTimeSlotButton : null,
                   ]}
                   onPress={() => handleTimeSlotSelection("8:00 pm")}
+                  disabled={!selectedDate}
                 >
                   <Text style={styles.timeSlotButtonText}>8:00 pm</Text>
                 </TouchableOpacity>
