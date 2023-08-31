@@ -7,32 +7,7 @@ import { getAuth, signOut } from "firebase/auth";
 
 const BookingScreen = () => {
   const navigation = useNavigation();
-  // Dummy data for testing
-  const bookings = [
-    {
-      fullName: "Kamal",
-      email: "test@gmail.com",
-      city: "Debai",
-      street: "Deira",
-      selectedDate: "2023-08-03",
-      selectedTime: "9.30",
-      issue: "ElectricRepair",
-      acMechanics: 1,
-      Purchase: 500,
-    },
-    {
-      fullName: "Kamal",
-      email: "test@gmail.com",
-      city: "Debai",
-      street: "Deira",
-      selectedDate: "2023-08-03",
-      selectedTime: "9.30",
-      issue: "ElectricRepair",
-      acMechanics: 1,
-      Purchase: 500,
-    },
-    // Add more dummy data here if you want to test with multiple cards
-  ];
+
 
 
   return (
@@ -41,7 +16,7 @@ const BookingScreen = () => {
 
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>Bookings</Text>
+        <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Bookings</Text>
         
       </View>
  

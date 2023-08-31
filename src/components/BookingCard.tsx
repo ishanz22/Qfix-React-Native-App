@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet ,Image} from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../../firebaseConfig';
 import { getAuth } from 'firebase/auth';
@@ -42,7 +42,13 @@ const BookingCard = () => {
           </View>
         ))
       ) : (
-        <Text>No booking data found</Text>
+        <View style={styles.noDataContainer}>
+          <Image source={require('../assets/nobk.png')} 
+            style={[styles.noDataImage, { opacity: 0.5 }]} // Adjust opacity here
+            />
+          <Text style={styles.noDataText}>No bookings yet</Text>
+          
+        </View>
       )}
     </View>
   );
@@ -94,6 +100,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 3,
+    
   },
   header: {
     flexDirection: "row",
@@ -140,6 +147,25 @@ const styles = StyleSheet.create({
     paddingTop:3,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  noDataContainer: {
+  
+
+  height:"85%",
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataImage: {
+    width: 270,
+    height: 270,
+    resizeMode: 'contain',
+   
+  },
+  noDataText: {
+    fontSize: 18,
+color:'white',
+opacity: 0.5 ,
+fontWeight:'bold'
   },
 });
 

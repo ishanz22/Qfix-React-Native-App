@@ -53,7 +53,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <Text style={styles.headerText}>Quick Fix Technical Services</Text>
+      <Text style={styles.headerText}><Text style={{fontSize:10}}>{"\n"}</Text>Quick Fix Technical Services</Text>
         <View style={styles.horizontalCardsContainer}>
           <ServiceCard
             title={servicesData[0].title}

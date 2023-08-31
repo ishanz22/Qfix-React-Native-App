@@ -121,7 +121,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#3D4147",
-    paddingBottom:10
+    paddingBottom:10,
+    borderBottomWidth:1,
+    borderBottomColor:"#35383D"
   },
   logoContainer: {
     flex: 1,
