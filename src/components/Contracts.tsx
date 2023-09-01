@@ -75,7 +75,7 @@ const Contracts = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>Annual Contracts</Text>
+        {/* <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Annual Contracts</Text> */}
       </View>
       <Card
         imageSource={require("../assets/spa.jpg")}
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     alignSelf: "flex-start",
+    paddingTop:8
   },
   headingText: {
     fontSize: 26,

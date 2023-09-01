@@ -107,8 +107,8 @@ function MainContainer() {
 
       <Tab.Screen
         name="Screen2"
-        options={{ headerShown: false }}
-        component={ContractStack}
+     
+        component={ContractScreen}
       />
       <Tab.Screen name="Screen3" component={SupportScreen} />
     </Tab.Navigator>
@@ -122,8 +122,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#3D4147",
     paddingBottom:10,
-    borderBottomWidth:1,
-    borderBottomColor:"#35383D"
+
   },
   logoContainer: {
     flex: 1,

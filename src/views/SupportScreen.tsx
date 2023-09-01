@@ -16,7 +16,7 @@ const BookingScreen = () => {
 
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Bookings</Text>
+        {/* <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Bookings</Text> */}
         
       </View>
  
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     alignSelf: "flex-start",
+    paddingTop:8
   },
   headingText: {
     fontSize: 26,
