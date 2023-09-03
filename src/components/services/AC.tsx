@@ -256,13 +256,14 @@ const AC = () => {
      "\nUser totalCost:",
      totalCost
    );
+         navigation.replace("success");
  }
 
 
   
   
             // Place your payment logic here
-            navigation.replace("success");
+      
           } else {
             console.log("User document does not exist.");
           }
