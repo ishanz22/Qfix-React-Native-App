@@ -11,4 +11,4 @@ const MYAPP = (
     <App />
   </StripeProvider>
 );
-registerRootComponent(MYAPP);
+registerRootComponent(App);

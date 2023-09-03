@@ -225,6 +225,7 @@ const AC = () => {
 
  if (!paymentSheetInitialized) {
    const initializationSuccessful = await initializePaymentSheet(totalCost);
+   console.log(initializationSuccessful);
    if (!initializationSuccessful) {
      console.log("Payment sheet initialization failed");
      return;
@@ -261,7 +262,7 @@ const AC = () => {
   
   
             // Place your payment logic here
-            // navigation.replace("success");
+            navigation.replace("success");
           } else {
             console.log("User document does not exist.");
           }
