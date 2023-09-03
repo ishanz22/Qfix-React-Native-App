@@ -110,6 +110,8 @@ function MainContainer() {
      
         component={ContractScreen}
       />
+
+      
       <Tab.Screen name="Screen3" component={SupportScreen} />
     </Tab.Navigator>
   );
