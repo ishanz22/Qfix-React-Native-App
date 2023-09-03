@@ -77,11 +77,11 @@ const Contracts = () => {
       <View style={styles.headingContainer}>
         {/* <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Annual Contracts</Text> */}
       </View>
-      <Card
+      {/* <Card
         imageSource={require("../assets/spa.jpg")}
         title="Saloon & Spa"
         description="Annual PPM Packages"
-        onPress={() => navigation.navigate('salonAnnual')}      />
+        onPress={() => navigation.navigate('salonAnnual')}      /> */}
       <Card
         imageSource={require("../assets/vila.jpg")}
         title="Villa"

@@ -378,9 +378,37 @@ const Router = () => {
       <Stack.Screen
         name="villaAnnual"
         component={VillaAnnualPackages}
-        options={{
-          header: AnnualPackageHeader,
-        }}
+        options={({ navigation }) => ({
+          header: () => (
+            <View style={Platform.OS === 'ios' ? { paddingTop: 5 } :  {paddingTop: 37 }}>
+            <View style={styles.headerContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={styles.chevronIcon}
+              >
+                 <Ionicons name="chevron-back" size={27} color="#FBB92B" />
+              </TouchableOpacity>
+      
+              <View style={styles.headerCenter}>
+                <Image
+                  source={require("../assets/qlogo.png")}
+                  style={styles.logo}
+                  resizeMode="contain"
+                />
+              </View>
+      
+              <View style={styles.cartIconWrapper}>
+                <TouchableOpacity
+                  onPress={() => navigation.openDrawer()}
+                  style={styles.cartIcon}
+                >
+                  <Ionicons name="ios-menu" size={27} color="#FBB92B" />
+                </TouchableOpacity>
+              </View>
+            </View>
+            </View>
+          ),
+        })}
       />
 
       <Stack.Screen
