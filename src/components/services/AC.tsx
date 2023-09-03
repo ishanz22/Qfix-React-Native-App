@@ -12,11 +12,18 @@ import {
 } from "react-native";
 
 import { Formik } from "formik";
-
+import { useStripe } from "@stripe/stripe-react-native";
 import { Calendar } from "react-native-calendars";
 import { useNavigation } from "@react-navigation/native";
 import { collection, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../firebaseConfig";
+import {
+  httpsCallable,
+  Functions,
+  httpsCallableFromURL,
+  getFunctions,
+} from "firebase/functions";
+
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -27,7 +34,16 @@ import {
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
 
+import * as firebase from "firebase/app";
+import "firebase/functions";
+
+
+
 const AC = () => {
+ const { initPaymentSheet, presentPaymentSheet } = useStripe();
+   const [paymentSheetInitialized, setPaymentSheetInitialized] =
+     useState(false);
+
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedService, setSelectedService] = useState("");
@@ -144,6 +160,37 @@ const AC = () => {
     setShowCalendar(true);
   };
 
+
+// function to initializee stripe 
+  const initializePaymentSheet = async (value:any) => {
+    console.log(value);
+    try {
+      const generatePaymentIntentFn = httpsCallable(
+        getFunctions(),
+        "createPaymentIntent"
+      );
+      console.log("==============================")
+      const { data } = await generatePaymentIntentFn({ amount: value * 100 }); // Replace with the actual amount
+     
+      console.log("==============================")
+      if (data.clientSecret) {
+        const { error } = await initPaymentSheet({
+          paymentIntentClientSecret: data.clientSecret,
+          merchantDisplayName: "QFix", // Provide a valid merchant display name
+        });
+        console.log(error);
+        if (!error) {
+          return true; // Indicate successful initialization
+        }
+      }
+    } catch (error) {
+      console.log("Error initializing PaymentSheet:", error?.message);
+      return false; // Indicate failure to initialize
+    }
+  };
+
+
+
   const payFunction = async () => {
     if (selectedService &&inputValues && selectedDate && selectedTimeSlot && totalCost) {
       // Get the current user's UID
@@ -174,21 +221,47 @@ const AC = () => {
               mobileNumber: mobileNumber,
               email: user.email,
             };
+
+
+ if (!paymentSheetInitialized) {
+   const initializationSuccessful = await initializePaymentSheet(totalCost);
+   if (!initializationSuccessful) {
+     console.log("Payment sheet initialization failed");
+     return;
+   }
+ }
+
+ const { error } = await presentPaymentSheet();
+
+ if (error) {
+   console.log("Payment failed:", error.message);
+ }
+ else{
+
+   // Save paymentInfo to a subcollection under the user's UID
+   await addDoc(collection(FIRESTORE_DB, "users", userId, "payments"), paymentInfo);
   
-            // Save paymentInfo to a subcollection under the user's UID
-            await addDoc(collection(FIRESTORE_DB, "users", userId, "payments"), paymentInfo);
+   // Display user data and other information in the console
+   console.log("Payment data saved to Firestore successfully!");
+   console.log(
+     "Username:",
+     userName,
+     "\nMobile Number:",
+     mobileNumber,
+     "\nUser UID:",
+     userId,
+     "\nUser Email:",
+     user.email,
+     "\nUser totalCost:",
+     totalCost
+   );
+ }
+
+
   
-            // Display user data and other information in the console
-            console.log("Payment data saved to Firestore successfully!");
-            console.log(
-              "Username:", userName,
-              "\nMobile Number:", mobileNumber,
-              "\nUser UID:", userId,
-              "\nUser Email:", user.email
-            );
   
             // Place your payment logic here
-            navigation.replace("success");
+            // navigation.replace("success");
           } else {
             console.log("User document does not exist.");
           }

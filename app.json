@@ -14,6 +14,16 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          // "merchantIdentifier": string | string [],
+          "enableGooglePay": true,
+          "clientSecret": "pk_test_51NX0FJCpIfsOZ2tJnMEKddWEWDd48gsnet8jpNwlQo9zGVQG8IxVhqNV36qbMDipLqJ5ep8wXNVxRMxG9TMUBqi500bJh3ponx"
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ishanz.qfix"
