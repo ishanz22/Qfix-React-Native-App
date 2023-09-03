@@ -1,11 +1,16 @@
 import React from "react";
-import { Platform,SafeAreaView } from "react-native";
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { Platform, SafeAreaView } from "react-native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
 import Router from "./src/configurations/Router";
-import {  StatusBar as ExpoStatusBar } from "expo-status-bar"; // Import ExpoStatusBar
-import { useColorScheme } from 'react-native';
+import { StatusBar as ExpoStatusBar } from "expo-status-bar"; // Import ExpoStatusBar
+import { useColorScheme } from "react-native";
 import DrawerMenu from "./src/components/DrawerMenu";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const CustomDarkTheme = {
   ...DarkTheme,
@@ -22,20 +27,21 @@ export default function App() {
 
   return (
     <StripeProvider publishableKey="pk_test_51NX0FJCpIfsOZ2tJnMEKddWEWDd48gsnet8jpNwlQo9zGVQG8IxVhqNV36qbMDipLqJ5ep8wXNVxRMxG9TMUBqi500bJh3ponx">
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: "#3D4147", paddingTop: 0 }}
-      >
-        {/* Use ExpoStatusBar from expo-status-bar package */}
-        <ExpoStatusBar
-          style={isIOS ? "light" : "auto"}
-          backgroundColor="#3D4147"
-        />
-        <NavigationContainer
-          theme={scheme === "dark" ? CustomDarkTheme : DefaultTheme}
+      <ToastProvider>
+        <SafeAreaView
+          style={{ flex: 1, backgroundColor: "#3D4147", paddingTop: 0 }}
         >
-          <DrawerMenu component={Router} />
-        </NavigationContainer>
-      </SafeAreaView>
+          <ExpoStatusBar
+            style={isIOS ? "light" : "auto"}
+            backgroundColor="#3D4147"
+          />
+          <NavigationContainer
+            theme={scheme === "dark" ? CustomDarkTheme : DefaultTheme}
+          >
+            <DrawerMenu component={Router} />
+          </NavigationContainer>
+        </SafeAreaView>
+      </ToastProvider>
     </StripeProvider>
   );
 }

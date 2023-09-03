@@ -20,6 +20,7 @@ import { FIRESTORE_DB } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import {  useToast } from 'react-native-toast-notifications'; // Import ToastProvider and useToast
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -34,7 +35,7 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
   const auth = getAuth();
   const [showPassword, setShowPassword] = React.useState(false);
-
+  const  toast  = useToast(); 
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -62,9 +63,38 @@ const SignUpScreen = () => {
           // Save user data to Firestore using the previously defined FIRESTORE_DB
           await setDoc(doc(FIRESTORE_DB, "users", user.uid), userData);
           console.log("User registered and data saved to Firebase");
+          toast.show("You are Successfully registered", {
+            type: "success",
+            placement: "bottom",
+            duration: 3000,
+          });
+          setTimeout(() => {
+            navigation.replace("login");
+          }, 2000); 
         }
       } catch (error) {
-        console.error("Error registering user:", error);
+        // console.error("Error registering user:", error);
+        if (error.code === 'auth/email-already-in-use') {
+          toast.show("Email is already in use", {
+            type: "error",
+            placement: "bottom",
+            duration: 3000,
+            animationType: "slide-in",
+            style: {
+              backgroundColor: '#CE0000'
+            }
+          });
+        } else {
+          toast.show("User Registration Error", {
+            type: "error",
+            placement: "bottom",
+            duration: 3000,
+            animationType: "slide-in",
+            style: {
+              backgroundColor: '#CE0000'
+            }
+          });
+        }
       }
     },
   });

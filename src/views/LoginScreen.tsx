@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getAuth, signInWithEmailAndPassword, AuthCredential,onAuthStateChanged } from "firebase/auth";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {  useToast } from 'react-native-toast-notifications'; // Import ToastProvider and useToast
 
 
 
@@ -30,7 +31,7 @@ const validationSchema = Yup.object().shape({
 
 const LoginScreen = () => {
   const [loading, setLoading] = useState(true); 
- 
+  const  toast  = useToast(); 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -64,11 +65,61 @@ const LoginScreen = () => {
         .then((userCredentials) => {
           const user = userCredentials.user;
           console.log("Logged in successfully");
+          toast.show("Welcome back! You have successfully logged in", {
+            type: "success",
+            placement: "bottom",
+            duration: 3000,
+            animationType: "slide-in",
+         
+          });
           navigation.replace("MainContainer");
         })
         .catch((error) => {
-          console.error("Error logging in:", error);
+   2
+          if (error.code === 'auth/user-not-found') {
+            toast.show("Account not found. Please check your email or username", {
+              type: "error",
+              placement: "bottom",
+              duration: 3000,
+              animationType: "slide-in",
+              style: {
+                backgroundColor: '#CE0000'
+              }
+            });
+          } else if (error.code === 'auth/wrong-password') {
+            toast.show("Invalid Username or Password", {
+              type: "error",
+              placement: "bottom",
+              duration: 3000,
+              animationType: "slide-in",
+              style: {
+                backgroundColor: '#CE0000'
+              }
+            });
+          } else if (error.code === 'auth/too-many-requests') {
+            toast.show("Account temporarily disabled due to many failed login attempts. Please try again later", {
+              type: "error",
+              placement: "bottom",
+              duration: 3000,
+              animationType: "slide-in",
+              style: {
+                backgroundColor: '#CE0000'
+              }
+            });
+          } else {
+            toast.show("An error occurred during login. Please try again later", {
+              type: "error",
+              placement: "bottom",
+              duration: 3000,
+              animationType: "slide-in",
+              style: {
+                backgroundColor: '#CE0000'
+              }
+            });
+          }
         });
+        
+        
     },
   });
 
