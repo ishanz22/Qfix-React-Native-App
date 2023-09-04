@@ -178,7 +178,7 @@ const AC = () => {
           paymentIntentClientSecret: data.clientSecret,
           merchantDisplayName: "QFix", // Provide a valid merchant display name
         });
-        console.log(error);
+        // console.log(error);
         if (!error) {
           return true; // Indicate successful initialization
         }

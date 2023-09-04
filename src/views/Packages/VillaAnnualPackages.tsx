@@ -24,11 +24,23 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-
+import { useStripe } from "@stripe/stripe-react-native";
+import {
+  httpsCallable,
+  Functions,
+  httpsCallableFromURL,
+  getFunctions,
+} from "firebase/functions";
+import "firebase/functions";
 const screenWidth = Dimensions.get("window").width;
 const buttonWidth = (screenWidth - 40 - 10) / 3; // 40 is the total horizontal padding, and 10 is the total horizontal margin for 3 buttons.
 
 const VillaAnnualPackages = (): any => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [paymentSheetInitialized, setPaymentSheetInitialized] =
+    useState(false);
+
+
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedService, setSelectedService] = useState("");
@@ -147,6 +159,33 @@ const VillaAnnualPackages = (): any => {
     setShowCalendar(true);
   };
 
+  const initializePaymentSheet = async (value:any) => {
+    console.log(value);
+    try {
+      const generatePaymentIntentFn = httpsCallable(
+        getFunctions(),
+        "createPaymentIntent"
+      );
+      console.log("==============================")
+      const { data } = await generatePaymentIntentFn({ amount: value * 100 }); // Replace with the actual amount
+     
+      console.log("==============================")
+      if (data.clientSecret) {
+        const { error } = await initPaymentSheet({
+          paymentIntentClientSecret: data.clientSecret,
+          merchantDisplayName: "QFix", // Provide a valid merchant display name
+        });
+        // console.log(error);
+        if (!error) {
+          return true; // Indicate successful initialization
+        }
+      }
+    } catch (error) {
+      console.log("Error initializing PaymentSheet:", error?.message);
+      return false; // Indicate failure to initialize
+    }
+  };
+
   const payFunction = async (clickedButton) => {
     if (
       selectedService &&
@@ -190,39 +229,64 @@ const VillaAnnualPackages = (): any => {
             };
 
             // Save paymentInfo to a subcollection under the user's UID
-            await addDoc(
-              collection(FIRESTORE_DB, "users", userId, "annual payments"),
-              paymentInfo
-            );
-
-            // Display user data and other information in the console
-            console.log("Payment data saved to Firestore successfully!");
-            console.log(
-              "Username:",
-              userName,
-              "\nMobile Number:",
-              mobileNumber,
-              "\nUser UID:",
-              userId,
-              "\nUser Email:",
-              user.email
-            );
-
-            // Place your payment logic here
-            navigation.replace("success");
-          } else {
-            console.log("User document does not exist.");
-          }
-        } catch (error) {
-          console.error("Error saving payment data:", error);
-        }
-      } else {
-        console.log("User not authenticated.");
-      }
-    } else {
-      console.log("Please fill in all required fields.");
-    }
-  };
+            if (!paymentSheetInitialized) {
+              const initializationSuccessful = await initializePaymentSheet(totalCost);
+              console.log(initializationSuccessful);
+              if (!initializationSuccessful) {
+                console.log("Payment sheet initialization failed");
+                return;
+              }
+            }
+           
+            const { error } = await presentPaymentSheet();
+           
+            if (error) {
+              console.log("Payment failed:", error.message);
+            }
+            else{
+           
+              // Save paymentInfo to a subcollection under the user's UID
+              await addDoc(
+                collection(FIRESTORE_DB, "users", userId, "annual payments"),paymentInfo);
+             
+              // Display user data and other information in the console
+              console.log("Payment data saved to Firestore successfully!");
+              console.log(
+                "Username:",
+                userName,
+                "\nMobile Number:",
+                mobileNumber,
+                "\nUser UID:",
+                userId,
+                "\nUser Email:",
+                user.email,
+                "\nUser totalCost:",
+                totalCost
+              );
+                    navigation.replace("success");
+            }
+           
+           
+             
+             
+                       // Place your payment logic here
+                 
+                     } else {
+                       console.log("User document does not exist.");
+                     }
+                   } catch (error) {
+                     console.error("Error saving payment data:", error);
+                   }
+                 } else {
+                   console.log("User not authenticated.");
+                 }
+               } else {
+                 console.log("Please fill in all required fields.");
+               }
+             };
+             
+             
+             
 
   const circlesData = [
     { name: "AC", icon: require("../../assets/airc2.png"), quantity: "x2" },
