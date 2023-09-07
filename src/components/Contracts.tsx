@@ -75,13 +75,13 @@ const Contracts = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>Annual Contracts</Text>
+        {/* <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Annual Contracts</Text> */}
       </View>
-      <Card
+      {/* <Card
         imageSource={require("../assets/spa.jpg")}
         title="Saloon & Spa"
         description="Annual PPM Packages"
-        onPress={() => navigation.navigate('salonAnnual')}      />
+        onPress={() => navigation.navigate('salonAnnual')}      /> */}
       <Card
         imageSource={require("../assets/vila.jpg")}
         title="Villa"
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     alignSelf: "flex-start",
+    paddingTop:8
   },
   headingText: {
     fontSize: 26,

@@ -1,34 +1,14 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Text,TouchableOpacity } from "react-native";
 import BookingCard from "../components/BookingCard";
+import { navigate } from "@react-navigation/routers/lib/typescript/src/CommonActions";
+import { useNavigation } from "@react-navigation/native";
+import { getAuth, signOut } from "firebase/auth";
 
 const BookingScreen = () => {
-  // Dummy data for testing
-  const bookings = [
-    {
-      fullName: "Kamal",
-      email: "test@gmail.com",
-      city: "Debai",
-      street: "Deira",
-      selectedDate: "2023-08-03",
-      selectedTime: "9.30",
-      issue: "ElectricRepair",
-      acMechanics: 1,
-      Purchase: 500,
-    },
-    {
-      fullName: "Kamal",
-      email: "test@gmail.com",
-      city: "Debai",
-      street: "Deira",
-      selectedDate: "2023-08-03",
-      selectedTime: "9.30",
-      issue: "ElectricRepair",
-      acMechanics: 1,
-      Purchase: 500,
-    },
-    // Add more dummy data here if you want to test with multiple cards
-  ];
+  const navigation = useNavigation();
+
+
 
   return (
     <View style={{backgroundColor:'#3D4147'}}>
@@ -36,11 +16,12 @@ const BookingScreen = () => {
 
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>Bookings</Text>
+        {/* <Text style={styles.headingText}><Text style={{fontSize:10}}>{"\n"}</Text>Bookings</Text> */}
+        
       </View>
-      {bookings.map((booking, index) => (
-        <BookingCard key={index} {...booking} />
-      ))}
+ 
+        <BookingCard  />
+   
     </ScrollView>
     </View>
   );
@@ -54,6 +35,7 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     alignSelf: "flex-start",
+    paddingTop:8
   },
   headingText: {
     fontSize: 26,

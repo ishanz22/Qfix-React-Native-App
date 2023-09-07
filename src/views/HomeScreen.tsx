@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 import ServiceCard from "../components/ServiceCard";
-import { useNavigation } from "@react-navigation/native";
+  import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -53,7 +53,8 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <Text style={styles.headerText}>Quick Fix Technical Services</Text>
+      {/* <Text style={styles.headerText}><Text style={{fontSize:10}}>{"\n"}</Text>Quick Fix Technical Services</Text> */}
+      <View style={{paddingTop:8}}/>
         <View style={styles.horizontalCardsContainer}>
           <ServiceCard
             title={servicesData[0].title}
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
   horizontalCardsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    
   },
   verticalCardsContainer: {
     flex: 1,
